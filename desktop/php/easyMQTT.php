@@ -222,7 +222,7 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
   </div>
-
+</div>
 </div>
 </div>
 

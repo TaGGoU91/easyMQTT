@@ -92,12 +92,12 @@ $("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
     });
 });
 
-$("#bt_addMQTTAction").on('click', function(event) {
+$("#bt_addeasyMQTTAction").on('click', function(event) {
 	var _cmd = {type: 'action'};
 	addCmdToTable(_cmd);
 });
 
-$('#bt_healthMQTT').on('click', function () {
+$('#bt_healtheasyMQTT').on('click', function () {
 	$('#md_modal').dialog({title: "{{Santé easyMQTT}}"});
 	$('#md_modal').load('index.php?v=d&plugin=easyMQTT&modal=health').dialog('open');
 });

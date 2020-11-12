@@ -50,9 +50,10 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
 
-    <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
+    <!--<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />-->
 
     <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements MQTT}}</legend>
+		<input class="form-control" placeholder="{{Rechercher parmis vos équipements}}" id="in_searchEqlogic" />
     <div class="eqLogicThumbnailContainer">
       <?php
       foreach ($eqLogics as $eqLogic) {
@@ -193,7 +194,7 @@ function console_log($output, $with_script_tags = true) {
       <form class="form-horizontal">
         <fieldset>
           <div class="form-actions">
-            <a class="btn btn-success btn-sm cmdAction" id="bt_addMQTTAction"><i class="fas fa-plus-circle"></i> {{Ajouter une commande action}}</a>
+            <a class="btn btn-success btn-sm cmdAction" id="bt_addeasyMQTTAction"><i class="fas fa-plus-circle"></i> {{Ajouter une commande action}}</a>
           </div>
         </fieldset>
       </form>

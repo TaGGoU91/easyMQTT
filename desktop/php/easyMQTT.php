@@ -68,6 +68,7 @@ function console_log($output, $with_script_tags = true) {
     </div>
   </div>
   
+ <div class="eqLogic col-lg-12" style="display: none;" id="listCol2">
   <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
     <a class="btn btn-success eqLogicAction pull-right" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a>
     <a class="btn btn-danger eqLogicAction pull-right" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
@@ -216,6 +217,7 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
   </div>
+</div>
 </div>
 </div>
 

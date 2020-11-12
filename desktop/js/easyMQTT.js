@@ -98,8 +98,8 @@ $("#bt_addMQTTAction").on('click', function(event) {
 });
 
 $('#bt_healthMQTT').on('click', function () {
-	$('#md_modal').dialog({title: "{{Santé MQTT}}"});
-	$('#md_modal').load('index.php?v=d&plugin=MQTT&modal=health').dialog('open');
+	$('#md_modal').dialog({title: "{{Santé easyMQTT}}"});
+	$('#md_modal').load('index.php?v=d&plugin=easyMQTT&modal=health').dialog('open');
 });
 
 $("#butCol").click(function(){

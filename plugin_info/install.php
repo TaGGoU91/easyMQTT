@@ -19,7 +19,8 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function easyMQTT_install() {
-    $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
+    log::add('easyMQTT','debug','Func easyMQTT_install - install.php');
+	$cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('easyMQTT');
@@ -33,6 +34,7 @@ function easyMQTT_install() {
 }
 
 function easyMQTT_update() {
+	log::add('easyMQTT','debug','Func easyMQTT_update - install.php');
     $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
         $cron = new cron();
@@ -47,7 +49,8 @@ function easyMQTT_update() {
 }
 
 function easyMQTT_remove() {
-    $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
+    log::add('easyMQTT','debug','Func easyMQTT_remove - install.php');
+	$cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (is_object($cron)) {
         $cron->stop();
         $cron->remove();

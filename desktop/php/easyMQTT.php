@@ -3,8 +3,11 @@
 if (!isConnect('admin')) {
   throw new Exception('{{401 - Accès non autorisé}}');
 }
-sendVarToJS('eqType', 'easyMQTT');
-$eqLogics = eqLogic::byType('easyMQTT');
+// sendVarToJS('eqType', 'easyMQTT');
+// $eqLogics = eqLogic::byType('easyMQTT');
+$plugin = plugin::byId('easyMQTT');
+sendVarToJS('eqType', $plugin->getId()); // Permet de rendre cliquable les éléments de la page Mes équipements 
+$eqLogics = eqLogic::byType($plugin->getId()); // Permet de récupérer la liste des équipements de type easyMQTT dans la table eqLogic
 
 // pour le débug -> permet d'afficher sur la console du navigateur en appelant la fonction console_log
 function console_log($output, $with_script_tags = true) {
@@ -47,6 +50,11 @@ function console_log($output, $with_script_tags = true) {
         <br/>
         <span>{{Configuration}}</span>
       </div>
+	  <div class="cursor eqLogicAction logoSecondary" id="bt_healtheasyMQTT"> <!-- l'action est traitée dans le vmware.js -->
+			<i class="fas fa-medkit"></i>
+			<br>
+			<span>{{Santé}}</span>
+	  </div>
 
     </div>
 

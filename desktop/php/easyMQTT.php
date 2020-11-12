@@ -151,7 +151,7 @@ function console_log($output, $with_script_tags = true) {
 
           <div class="form-group">
             <label class="col-sm-3 control-label">{{Icone du topic}}</label>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
               <select id="sel_icon" class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="icone">
                 <option value="">{{Aucun}}</option>
                 <option value="433">{{RF433}}</option>

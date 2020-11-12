@@ -21,6 +21,7 @@
 // });
 
 $(".li_eqLogic").on('click', function (event) {
+	console.log("fonction 1 du Js");    
   if (event.ctrlKey) {
     var type = $('body').attr('data-page')
     var url = '/index.php?v=d&m='+type+'&p='+type+'&id='+$(this).attr('data-eqlogic_id')
@@ -85,6 +86,7 @@ $(".li_eqLogic").on('click', function (event) {
 });
 
 $("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
+	console.log("fonction 2 du Js");    
     var el = $(this);
     jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
         var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');

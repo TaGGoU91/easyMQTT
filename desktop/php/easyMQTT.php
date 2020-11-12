@@ -233,10 +233,4 @@ function console_log($output, $with_script_tags = true) {
 <?php include_file('desktop', 'easyMQTT', 'js', 'easyMQTT'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
 
-<script>
-$( "#sel_icon" ).change(function(){
-  var text = 'plugins/easyMQTT/plugin_info/node_' + $("#sel_icon").val() + '.png';
-  //$("#icon_visu").attr('src',text);
-  document.icon_visu.src=text;
-});
-</script>
+

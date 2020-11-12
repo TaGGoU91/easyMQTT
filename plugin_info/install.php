@@ -18,7 +18,7 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function MQTT_install() {
+function easyMQTT_install() {
     $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
         $cron = new cron();
@@ -32,7 +32,7 @@ function MQTT_install() {
     }
 }
 
-function MQTT_update() {
+function easyMQTT_update() {
     $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
         $cron = new cron();
@@ -46,16 +46,16 @@ function MQTT_update() {
     }
 }
 
-function MQTT_remove() {
+function easyMQTT_remove() {
     $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (is_object($cron)) {
         $cron->stop();
         $cron->remove();
     }
     log::add('easyMQTT','info','Suppression extension');
-    $resource_path = realpath(dirname(__FILE__) . '/../resources');
-    passthru('sudo /bin/bash ' . $resource_path . '/remove.sh ' . $resource_path . ' > ' . log::getPathToLog('easyMQTT_dep') . ' 2>&1 &');
-    return true;
+    // $resource_path = realpath(dirname(__FILE__) . '/../resources');
+    // passthru('sudo /bin/bash ' . $resource_path . '/remove.sh ' . $resource_path . ' > ' . log::getPathToLog('easyMQTT_dep') . ' 2>&1 &');
+    // return true;
 }
 
 ?>

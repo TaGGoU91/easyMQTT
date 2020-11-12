@@ -14,11 +14,11 @@
 * You should have received a copy of the GNU General Public License
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-$("#butCol").click(function(){
-  $("#hidCol").toggle("slow");
-  document.getElementById("listCol").classList.toggle('col-lg-12');
-  document.getElementById("listCol").classList.toggle('col-lg-10');
-});
+// $("#butCol").click(function(){
+  // $("#hidCol").toggle("slow");
+  // document.getElementById("listCol").classList.toggle('col-lg-12');
+  // document.getElementById("listCol").classList.toggle('col-lg-10');
+// });
 
 $(".li_eqLogic").on('click', function (event) {
   if (event.ctrlKey) {

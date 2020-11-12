@@ -58,7 +58,7 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
 
-    <!--<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />-->
+   <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 
     <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements MQTT}}</legend>
 		<input class="form-control" placeholder="{{Rechercher parmis vos équipements}}" id="in_searchEqlogic" />
@@ -233,4 +233,10 @@ function console_log($output, $with_script_tags = true) {
 <?php include_file('desktop', 'easyMQTT', 'js', 'easyMQTT'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
 
-
+<script>
+$( "#sel_icon" ).change(function(){
+  var text = 'plugins/easyMQTT/plugin_info/node_' + $("#sel_icon").val() + '.png';
+  ///////////////////$("#icon_visu").attr('src',text);
+  document.icon_visu.src=text;
+});
+</script>

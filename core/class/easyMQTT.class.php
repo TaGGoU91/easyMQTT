@@ -19,6 +19,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class easyMQTT extends eqLogic {
   public static function health() {
+	  log::add('easyMQTT','debug','Func health - easyMQTT.class.php');
     $return = array();
     $socket = socket_create(AF_INET, SOCK_STREAM, 0);
     $server = socket_connect ($socket , config::byKey('mqttAdress', 'easyMQTT', '127.0.0.1'), config::byKey('mqttPort', 'easyMQTT', '1883'));
@@ -32,6 +33,7 @@ class easyMQTT extends eqLogic {
   }
 
   public static function deamon_info() {
+	  log::add('easyMQTT','debug','Func deamon_info - easyMQTT.class.php');
     $return = array();
     $return['log'] = '';
     $return['state'] = 'nok';
@@ -43,10 +45,12 @@ class easyMQTT extends eqLogic {
     // if ($dependancy_info['state'] == 'ok') {
       // $return['launchable'] = 'ok';
     // }
+	$return['launchable'] = 'ok';
     return $return;
   }
 
   public static function deamon_start($_debug = false) {
+	  log::add('easyMQTT','debug','Func deamon_start - easyMQTT.class.php');
     self::deamon_stop();
     $deamon_info = self::deamon_info();
     if ($deamon_info['launchable'] != 'ok') {
@@ -60,6 +64,7 @@ class easyMQTT extends eqLogic {
   }
 
   public static function deamon_stop() {
+	  log::add('easyMQTT','debug','Func deamon_stop - easyMQTT.class.php');
     $cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
       throw new Exception(__('Tache cron introuvable', __FILE__));
@@ -87,7 +92,9 @@ class easyMQTT extends eqLogic {
     // }
 
   public static function daemon() {
-    log::add('easyMQTT', 'info', 'Paramètres utilisés, Host : ' . config::byKey('MQTTAdress', 'easyMQTT', '127.0.0.1') . ', Port : ' . config::byKey('mqttPort', 'easyMQTT', '1883') . ', ID : ' . config::byKey('mqttId', 'easyMQTT', 'Jeedom'));
+	  log::add('easyMQTT','debug','Func deamon - easyMQTT.class.php');
+	  log::add('easyMQTT', 'debug', 'Paramètres utilisés, Host : ' . config::byKey('mqttAdress', 'easyMQTT', '127.0.0.1') . ', Port : ' . config::byKey('mqttPort', 'easyMQTT', '1883') . ', ID : ' . config::byKey('mqttId', 'easyMQTT', 'Jeedom'));
+    log::add('easyMQTT', 'info', 'Paramètres utilisés, Host : ' . config::byKey('mqttAdress', 'easyMQTT', '127.0.0.1') . ', Port : ' . config::byKey('mqttPort', 'easyMQTT', '1883') . ', ID : ' . config::byKey('mqttId', 'easyMQTT', 'Jeedom'));
     $client = new Mosquitto\Client(config::byKey('mqttId', 'easyMQTT', 'Jeedom'));
     $client->onConnect('easyMQTT::connect');
     $client->onDisconnect('easyMQTT::disconnect');
@@ -121,20 +128,25 @@ class easyMQTT extends eqLogic {
   }
 
   public static function connect( $r, $message ) {
+	  log::add('easyMQTT','debug','Func connect - easyMQTT.class.php');
+	  log::add('easyMQTT', 'debug', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     log::add('easyMQTT', 'info', 'Connexion à Mosquitto avec code ' . $r . ' ' . $message);
     config::save('status', '1',  'easyMQTT');
   }
 
   public static function disconnect( $r ) {
+	  log::add('easyMQTT','debug','Func disconnect - easyMQTT.class.php');
     log::add('easyMQTT', 'debug', 'Déconnexion de Mosquitto avec code ' . $r);
     config::save('status', '0',  'easyMQTT');
   }
 
   public static function subscribe( ) {
+	  log::add('easyMQTT','debug','Func subscribe - easyMQTT.class.php');
     log::add('easyMQTT', 'debug', 'Subscribe to topics');
   }
 
   public static function logmq( $code, $str ) {
+	  log::add('easyMQTT','debug','Func logmq - easyMQTT.class.php');
     if (strpos($str,'PINGREQ') === false && strpos($str,'PINGRESP') === false) {
       log::add('easyMQTT', 'debug', $code . ' : ' . $str);
     }
@@ -214,6 +226,7 @@ class easyMQTT extends eqLogic {
   }
 
   public static function publishMosquitto($_id, $_subject, $_message, $_retain) {
+	  log::add('easyMQTT','debug','Func publishMosquitto - easyMQTT.class.php');
     if ($_message == '') {
       return;
     }
@@ -236,6 +249,7 @@ class easyMQTT extends eqLogic {
 
 class easyMQTTCmd extends cmd {
   public function execute($_options = null) {
+	  log::add('easyMQTT','debug','Func execute - easyMQTT.class.php');
     switch ($this->getType()) {
       case 'action' :
       $request = $this->getConfiguration('request','1');

@@ -19,7 +19,7 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function easyMQTT_install() {
-    log::add('easyMQTT','debug','Func easyMQTT_install - install.php');
+    log::add('easyMQTT','debug','Func easyMQTT_install - Création du daemon si inexistant - install.php');
 	$cron = cron::byClassAndFunction('easyMQTT', 'daemon');
     if (!is_object($cron)) {
         $cron = new cron();

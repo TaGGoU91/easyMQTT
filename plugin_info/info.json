@@ -6,10 +6,10 @@
 	"author" : "TaG",
 	"require" : "3.3.24",
 	"category" : "automation protocol",
-	"language" : ["fr_FR",],
+	"language" : ["fr_FR"],
 	"compatibility" : ["diy","v4"],
-	"hasDependency" : 0,
-	"hasOwnDeamon" : 1,
+	"hasDependency" : false,
+	"hasOwnDeamon" : true,
 	"changelog" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/changelog.html",
 	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/"
 }

@@ -42,7 +42,7 @@ $eqLogics = eqLogic::byType('easyMQTT');
 
     <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 
-    <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements}}</legend>
+    <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements MQTT}}</legend>
     <div class="eqLogicThumbnailContainer">
       <?php
       foreach ($eqLogics as $eqLogic) {

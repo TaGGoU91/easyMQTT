@@ -102,11 +102,21 @@ $('#bt_healthMQTT').on('click', function () {
 	$('#md_modal').load('index.php?v=d&plugin=easyMQTT&modal=health').dialog('open');
 });
 
+// $("#butCol").click(function(){
+  // $("#hidCol").toggle("slow");
+  // document.getElementById("listCol").classList.toggle('col-lg-12');
+  // document.getElementById("listCol").classList.toggle('col-lg-10');
+// });
+
 $("#butCol").click(function(){
-  $("#hidCol").toggle("slow");
-  document.getElementById("listCol").classList.toggle('col-lg-12');
-  document.getElementById("listCol").classList.toggle('col-lg-10');
-});
+   $("#hidCol").toggle("slow");
+   document.getElementById("listCol").classList.toggle('col-lg-12');
+   document.getElementById("listCol").classList.toggle('col-lg-10');
+   document.getElementById("listCol2").classList.toggle('col-lg-12');
+   document.getElementById("listCol2").classList.toggle('col-lg-10');   
+   console.log("Réalignement des équipements suite au resize");    
+   window.dispatchEvent(new Event('resize'));
+ });
 
 $(".li_eqLogic").on('click', function (event) {
   if (event.ctrlKey) {

@@ -6,6 +6,16 @@ if (!isConnect('admin')) {
 sendVarToJS('eqType', 'easyMQTT');
 $eqLogics = eqLogic::byType('easyMQTT');
 
+// pour le débug -> permet d'afficher sur la console du navigateur en appelant la fonction console_log
+function console_log($output, $with_script_tags = true) {
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
+');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
 ?>
 
 

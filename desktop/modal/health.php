@@ -18,7 +18,7 @@
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
-$eqLogics = MQTT::byType('easyMQTT');
+$eqLogics = easyMQTT::byType('easyMQTT');
 ?>
 
 <table class="table table-condensed tablesorter" id="table_healthMQTT">

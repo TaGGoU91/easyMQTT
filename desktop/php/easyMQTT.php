@@ -1,5 +1,4 @@
 <?php
-
 if (!isConnect('admin')) {
   throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -54,7 +53,6 @@ function console_log($output, $with_script_tags = true) {
 			<br>
 			<span>{{Santé}}</span>
 	  </div>
-
     </div>
 
    <!--<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />-->
@@ -224,7 +222,7 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
   </div>
-</div>
+
 </div>
 </div>
 

@@ -89,14 +89,14 @@ function console_log($output, $with_script_tags = true) {
           <fieldset>
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Nom de l'équipement}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                 <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement easyMQTT}}"/>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label" >{{Objet parent}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <select class="form-control eqLogicAttr" data-l1key="object_id">
                   <option value="">{{Aucun}}</option>
                   <?php
@@ -130,21 +130,21 @@ function console_log($output, $with_script_tags = true) {
 
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Type de piles}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" placeholder="{{Doit être indiqué sous la forme : 3xAA}}"/>
               </div>
             </div>
 
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Topic MQTT}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <span class="eqLogicAttr" data-l1key="configuration" data-l2key="topic"></span>
               </div>
             </div>
 
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Commandes par topic ou json}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <span class="eqLogicAttr" data-l1key="configuration" data-l2key="type"></span>
               </div>
             </div>

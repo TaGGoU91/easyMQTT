@@ -38,9 +38,8 @@ function console_log($output, $with_script_tags = true) {
 
   <div class="col-lg-12 eqLogicThumbnailDisplay" id="listCol">
     <legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
-    <div class="eqLogicThumbnailContainer logoPrimary">
-
-      <div class="cursor eqLogicAction logoSecondary" data-action="add">
+    <div class="eqLogicThumbnailContainer">
+      <div class="cursor eqLogicAction logoPrimary" data-action="add">
           <i class="fas fa-plus-circle"></i>
           <br/>
         <span>{{Ajouter}}</span>
@@ -58,8 +57,7 @@ function console_log($output, $with_script_tags = true) {
 
     </div>
 
-   <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
-
+   <!--<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />-->
     <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements MQTT}}</legend>
 		<input class="form-control" placeholder="{{Rechercher parmis vos équipements}}" id="in_searchEqlogic" />
     <div class="eqLogicThumbnailContainer">

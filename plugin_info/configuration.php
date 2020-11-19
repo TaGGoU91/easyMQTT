@@ -32,44 +32,44 @@ if (!isConnect()) {
     <div class="form-group">
             <label class="col-lg-4 control-label">{{IP de Mosquitto : }}</label>
             <div class="col-lg-4">
-				<input id="mosquitto_por" class="configKey form-control" data-l1key="mqttAdress" style="margin-top:5px" placeholder="127.0.0.1"/>
+				<input id="mosquitto_por" class="configKey form-control" data-l1key="easymqttAdress" style="margin-top:5px" placeholder="127.0.0.1"/>
             </div>
         </div>
     <div class="form-group">
             <label class="col-lg-4 control-label">{{Port de Mosquitto : }}</label>
             <div class="col-lg-4">
-				<input id="mosquitto_por" class="configKey form-control" data-l1key="mqttPort" style="margin-top:5px" placeholder="1883"/>
+				<input id="mosquitto_por" class="configKey form-control" data-l1key="easymqttPort" style="margin-top:5px" placeholder="1883"/>
             </div>
         </div>
 
         <div class="form-group">
                 <label class="col-lg-4 control-label">{{Identifiant de Connexion : }}</label>
                 <div class="col-lg-4">
-    				<input id="mosquitto_por" class="configKey form-control" data-l1key="mqttId" style="margin-top:5px" placeholder="Jeedom"/>
+    				<input id="mosquitto_por" class="configKey form-control" data-l1key="easymqttId" style="margin-top:5px" placeholder="Jeedom"/>
                 </div>
         </div>
         <div class="form-group">
                 <label class="col-lg-4 control-label">{{Compte de Connexion (non obligatoire) : }}</label>
                 <div class="col-lg-4">
-    				<input id="mosquitto_por" class="configKey form-control" data-l1key="mqttUser" style="margin-top:5px" placeholder="Jeedom"/>
+    				<input id="mosquitto_por" class="configKey form-control" data-l1key="easymqttUser" style="margin-top:5px" placeholder="Jeedom"/>
                 </div>
          </div>
         <div class="form-group">
 				<label class="col-lg-4 control-label">{{Mot de passe de Connexion (non obligatoire) : }}</label>
 				<div class="col-lg-4">
-					<input id="mosquitto_por" type="password" class="configKey form-control" data-l1key="mqttPass" style="margin-top:5px" placeholder="Jeedom"/>
+					<input id="mosquitto_por" type="password" class="configKey form-control" data-l1key="easymqttPass" style="margin-top:5px" placeholder="Jeedom"/>
 				</div>
         </div>
 		<div class="form-group" id="mqtt_topic">
 				<label class="col-lg-4 control-label">{{Topic root (defaut: Tous) : }}</label>
 				<div class="col-lg-4">
-					<input id="mosquitto_por" class="configKey form-control" data-l1key="mqttTopic" style="margin-top:5px" placeholder="#"/>
+					<input id="mosquitto_por" class="configKey form-control" data-l1key="easymqttTopic" style="margin-top:5px" placeholder="#"/>
 				</div>
         </div>
 		<div class="form-group" id="mqtt_qos">
 			<label class="col-lg-4 control-label">{{Qos}}</label>
 			<div class="col-lg-4">
-				<select style="width : 40pxpx;" class="configKey form-control" data-l1key="mqttQos">
+				<select style="width : 40pxpx;" class="configKey form-control" data-l1key="easymqttQos">
 					<option value="0">0</option>
 					<option value="1" selected>1</option>
 					<option value="2">2</option>

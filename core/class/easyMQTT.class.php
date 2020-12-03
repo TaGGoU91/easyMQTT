@@ -107,7 +107,7 @@ class easyMQTT extends eqLogic {
       if (config::byKey('easymqttUser', 'easyMQTT', 'none') != 'none') {
         $client->setCredentials(config::byKey('easymqttUser', 'easyMQTT'), config::byKey('easymqttPass', 'easyMQTT'));
       }
-      $client->connect(config::byKey('easymqttAdress', 'easyMQTT', '127.0.0.1'), config::byKey('easymqttPort', 'easyMQTT', '1883'), 60);
+      $client->connect(config::byKey('easymqttAdress', 'easyMQTT', '127.0.0.1'), config::byKey('easymqttPort', 'easyMQTT', '1883'), 90);
       $topic = config::byKey('easymqttTopic', 'easyMQTT', '#');
       if (strpos($topic,',') === false) {
         $client->subscribe($topic, config::byKey('easymqttQos', 'easyMQTT', 1)); // !auto: Subscribe to root topic
@@ -147,6 +147,7 @@ class easyMQTT extends eqLogic {
 
   public static function logmq( $code, $str ) {
 	  log::add('easyMQTT','debug','Func logmq - easyMQTT.class.php');
+	  log::add('easyMQTT', 'debug', $code . ' : ' . $str);
     if (strpos($str,'PINGREQ') === false && strpos($str,'PINGRESP') === false) {
       log::add('easyMQTT', 'debug', $code . ' : ' . $str);
     }
@@ -172,21 +173,22 @@ class easyMQTT extends eqLogic {
       log::add('easyMQTT', 'info', 'Message texte : ' . $value . ' pour information : ' . $cmdId . ' sur : ' . $nodeid);
     }
 
-    // $elogic = self::byLogicalId($nodeid, 'easyMQTT'); ## création d'un équipement - version d'origine du plugin
-    // if (!is_object($elogic)) {
-      // $elogic = new easyMQTT();
-      // $elogic->setEqType_name('easyMQTT');
-      // $elogic->setLogicalId($nodeid);
-      // $elogic->setName($nodeid);
-      // $elogic->setConfiguration('topic', $nodeid);
-      // $elogic->setConfiguration('type', $type);
-      // log::add('easyMQTT', 'info', 'Saving device ' . $nodeid);
-      // $elogic->save();
-    // }
-    // $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
-    // $elogic->save();
+    $elogic = self::byLogicalId($nodeid, 'easyMQTT'); ## création d'un équipement - version d'origine du plugin
+    if (!is_object($elogic)) {
+      $elogic = new easyMQTT();
+      $elogic->setEqType_name('easyMQTT');
+      $elogic->setLogicalId($nodeid);
+      $elogic->setName($nodeid);
+      $elogic->setConfiguration('topic', $nodeid);
+      $elogic->setConfiguration('type', $type);
+      log::add('easyMQTT', 'info', 'Saving device ' . $nodeid);
+      $elogic->save();
+    }
+    $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
+    $elogic->save();
 
     if ($type == 'topic') {
+		log::add('easyMQTT', 'debug', 'Boucle topic dans fonction message');
     $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
     if (!is_object($cmdlogic)) {
       log::add('easyMQTT', 'info', 'Cmdlogic n existe pas, creation');
@@ -218,24 +220,24 @@ class easyMQTT extends eqLogic {
 			// log::add('easyMQTT', 'debug', 'Ce n\'est pas du XIAOMI : '. $xiaomi .'');
 		// }
 	  
-	  // foreach ($json as $cmdId => $value) { ### système historique conservé quelques jours pour comparer mes créations avec la mécanique d'origine
-					// $topicjson = $nodeid . '{' . $cmdId . '}'; # ici création de la commande pour le topic associé à la commande
-					// log::add('easyMQTT', 'info', 'Message json : ' . $value . ' pour information : ' . $cmdId);
-					// $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
-					// if (!is_object($cmdlogic)) {
-					  // log::add('easyMQTT', 'info', 'Cmdlogic n existe pas, creation');
-					  // $cmdlogic = new easyMQTTCmd();
-					  // $cmdlogic->setEqLogic_id($elogic->getId());
-					  // $cmdlogic->setEqType('easyMQTT');
-					  // $cmdlogic->setSubType('string');
-					  // $cmdlogic->setLogicalId($cmdId);
-					  // $cmdlogic->setType('info');
-					  // $cmdlogic->setName( $cmdId );
-					  // $cmdlogic->setConfiguration('topic', $topicjson);
-					  // $cmdlogic->save();
-					// }
-					// $elogic->checkAndUpdateCmd($cmdId,$value);
-				// }
+	  foreach ($json as $cmdId => $value) { ### système historique conservé quelques jours pour comparer mes créations avec la mécanique d'origine
+			$topicjson = $nodeid . '{' . $cmdId . '}'; # ici création de la commande pour le topic associé à la commande
+			log::add('easyMQTT', 'info', 'Message json : ' . $value . ' pour information : ' . $cmdId);
+			$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$cmdId);
+			if (!is_object($cmdlogic)) {
+			  log::add('easyMQTT', 'info', 'Cmdlogic n existe pas, creation');
+			  $cmdlogic = new easyMQTTCmd();
+			  $cmdlogic->setEqLogic_id($elogic->getId());
+			  $cmdlogic->setEqType('easyMQTT');
+			  $cmdlogic->setSubType('string');
+			  $cmdlogic->setLogicalId($cmdId);
+			  $cmdlogic->setType('info');
+			  $cmdlogic->setName( $cmdId );
+			  $cmdlogic->setConfiguration('topic', $topicjson);
+			  $cmdlogic->save();
+			}
+			$elogic->checkAndUpdateCmd($cmdId,$value);
+		}
 	  
 	  
 	    foreach ($json as $equipment => $value) {
@@ -261,7 +263,8 @@ class easyMQTT extends eqLogic {
 				$firstPart = explode("/", $message->topic); ##Testing - not working yet
 				$topicJson = $firstPart[0] . '/' . $value['friendly_name'] ;##Testing - not working yet
 				// $topicJson = $firstPart[0].'/#';
-				$topicJson = $firstPart[0];
+				// $topicJson = $firstPart[0];
+				log::add('easyMQTT', 'debug', 'Valeur de topicJson : '. $topicJson .'');
 				$elogic = self::byLogicalId($eqLogicId, 'easyMQTT');
 				if (!is_object($elogic)) {
 				  $elogic = new easyMQTT();
@@ -316,7 +319,7 @@ class easyMQTT extends eqLogic {
 						  $cmdlogic->setUnite($exposes['unit']);
 						  $cmdlogic->setConfiguration('topic', $topicJson);
 						  $cmdlogic->save();
-						  $elogic->checkAndUpdateCmd($cmdId,$value);
+						  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 						}elseif($exposes['access'] == 'rw'){
 						  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 						  log::add('easyMQTT', 'info', 'Cmdlogic n\'existe pas, creation');
@@ -330,7 +333,7 @@ class easyMQTT extends eqLogic {
 						  $cmdlogic->setUnite($exposes['unit']);
 						  $cmdlogic->setConfiguration('topic', $topicJson);
 						  $cmdlogic->save();
-						  $elogic->checkAndUpdateCmd($cmdId,$value);
+						  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 						  
 						  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 						  log::add('easyMQTT', 'info', 'Cmdlogic n\'existe pas, creation');
@@ -343,7 +346,7 @@ class easyMQTT extends eqLogic {
 						  $cmdlogic->setName($exposes['name']);
 						  $cmdlogic->setConfiguration('topic', $topicJson);
 						  $cmdlogic->save();
-						  $elogic->checkAndUpdateCmd($cmdId,$value);
+						  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 						  
 						}elseif($exposes['access'] == 'w'){
 						  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
@@ -357,7 +360,7 @@ class easyMQTT extends eqLogic {
 						  $cmdlogic->setName($exposes['name']);
 						  $cmdlogic->setConfiguration('topic', $topicJson);
 						  $cmdlogic->save();
-						  $elogic->checkAndUpdateCmd($cmdId,$value);
+						  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 						}else{
 								log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de TYPE pour la commande');
 						}

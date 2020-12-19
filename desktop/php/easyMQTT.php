@@ -58,26 +58,84 @@ function console_log($output, $with_script_tags = true) {
    <!--<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />-->
     <legend><i class="fas fa-home" id="butCol"></i> {{Mes Equipements MQTT}}</legend>
 		<input class="form-control" placeholder="{{Rechercher parmis vos équipements}}" id="in_searchEqlogic" />
-    <div class="eqLogicThumbnailContainer">
+    <!--<div class="eqLogicThumbnailContainer">-->
       <?php
-      foreach ($eqLogics as $eqLogic) {
-        //$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-		$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-		echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-        //echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff ; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-        echo "<center>";
-		
-		
-		if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
-				echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
-		 } else {
-          echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
-        }
-        // echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
-        echo "</center>";
-        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';		
+	  
+	  ///////// ZIGBEE
+	  echo '<div class="eqLogicThumbnailContainer">'; 
+		// echo '<div class="eqLogicAction cursor"  data-id="' . $eqLogic->getId() . '">'; // l'action est traitée dans le vmware.js le data-id permet de récupérer l'info dans le JS pour transmettre l'appel à la fonction refresh pour l'ESXi en question uniquement // on se base sur le terme synchronisation pour le retrouver dans le JS
+		echo '<div>'; // l'action est traitée dans le vmware.js le data-id permet de récupérer l'info dans le JS pour transmettre l'appel à la fonction refresh pour l'ESXi en question uniquement // on se base sur le terme synchronisation pour le retrouver dans le JS
+		echo '<br>';
+		echo '<img src="plugins/easyMQTT/resources/zigbee2mqtt.png">'; 
+		echo '<br>';
+		echo '<span class="name">Zigbee2mqtt</span>'; 
+		echo '<br>';
 		echo '</div>';
-      }
+	  // echo '</div>';
+	  foreach ($eqLogics as $eqLogic) {
+			if ($eqLogic->getConfiguration('type') == 'zigbee') {
+				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+				echo "<center>";
+					
+				if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
+						echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
+				 } else {
+				  echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+				}
+				///////// echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
+				echo "</center>";
+				echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';		
+				echo '</div>';
+			}
+		}
+	echo '</div>';
+	
+	
+		///////// Yeelight
+	  echo '<div class="eqLogicThumbnailContainer">'; 
+		// echo '<div class="eqLogicAction cursor"  data-id="' . $eqLogic->getId() . '">'; // l'action est traitée dans le vmware.js le data-id permet de récupérer l'info dans le JS pour transmettre l'appel à la fonction refresh pour l'ESXi en question uniquement // on se base sur le terme synchronisation pour le retrouver dans le JS
+		echo '<div>'; // l'action est traitée dans le vmware.js le data-id permet de récupérer l'info dans le JS pour transmettre l'appel à la fonction refresh pour l'ESXi en question uniquement // on se base sur le terme synchronisation pour le retrouver dans le JS
+		echo '<br>';
+		echo '<img src="plugins/easyMQTT/resources/yeelight.png">'; 
+		echo '<br>';
+		echo '<span class="name">Yeelight</span>'; 
+		echo '<br>';
+		echo '</div>';
+	 // echo '</div>';
+	  foreach ($eqLogics as $eqLogic) {
+			if ($eqLogic->getConfiguration('type') == 'yeelight') {
+				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+				echo "<center>";
+					
+				if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
+						echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
+				 } else {
+				  echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+				}
+				///////// echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
+				echo "</center>";
+				echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';		
+				echo '</div>';
+			}
+		}
+	  
+      // foreach ($eqLogics as $eqLogic) { // Utiliser avant le rangement par type de docker zigbee/yeelight/etc
+        // $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+		// echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+        // echo "<center>";
+			
+		// if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
+				// echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
+		 // } else {
+          // echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+        // }
+        /////////// echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
+        // echo "</center>";
+        // echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';		
+		// echo '</div>';
+      // }
       ?>
     </div>
   </div>

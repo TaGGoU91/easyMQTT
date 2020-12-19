@@ -1,5 +1,5 @@
 {
-	"id" : "easymqtt",
+	"id" : "easyMQTT",
 	"name" : "easyMQTT",
 	"description" : "Plugin permettant de communiquer via le protocole MQTT. Le plugin se base sur le broker Mosquitto, permettant donc d'être à la fois broker pour des clients mais aussi client d'un broker existant (bridge). Le plugin génère automatiquement des équipements sur les topics sélectionnés.",
 	"licence" : "AGPL",
@@ -11,5 +11,5 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : true,
 	"changelog" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/changelog.html",
-	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/",
+	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/"
 }

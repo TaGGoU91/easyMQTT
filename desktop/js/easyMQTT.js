@@ -29,7 +29,8 @@ function iconChange(){
 		 //}
 		if(icon != '' && icon != null){
 			console.log("On change l'icone");
-			$('#img_device').attr("src", 'plugins/easyMQTT/core/config/devices/'+icon+'/'+icon+'.png');
+			// $('#img_device').attr("src", 'plugins/easyMQTT/core/config/devices/'+icon+'/'+icon+'.jpg');
+			$('#img_device').attr("src", 'plugins/easyMQTT/core/config/devices/'+icon+'.jpg');
          } else {
 			console.log("On met l'icone par défaut - redondant avec le onerror");
 			$('#img_device').attr("src", 'plugins/easyMQTT/doc/images/easyMQTT_icon.png');

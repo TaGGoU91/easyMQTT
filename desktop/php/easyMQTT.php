@@ -68,8 +68,8 @@ function console_log($output, $with_script_tags = true) {
         echo "<center>";
 		
 		
-		if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '/' . $eqLogic->getConfiguration('modelShort') . '.png')) {
-				echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '/' . $eqLogic->getConfiguration('modelShort') . '.png' . '"/>';
+		if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
+				echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
 		 } else {
           echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
         }

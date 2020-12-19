@@ -197,18 +197,18 @@ function console_log($output, $with_script_tags = true) {
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
               </div>
             </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">{{Type de piles}}</label>
-              <div class="col-sm-6">
-                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" placeholder="{{Doit être indiqué sous la forme : 3xAA}}"/>
-              </div>
-            </div>
-
+					
+			<div class="form-group" id="pileType">
+			  <label class="col-sm-3 control-label">{{Type de piles}}</label>
+			  <div class="col-sm-6">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" placeholder="{{Doit être indiqué sous la forme : 3xAA}}"/>
+			  </div>
+			</div>
+			
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Topic MQTT}}</label>
               <div class="col-sm-6">
-                <span class="eqLogicAttr" data-l1key="configuration" data-l2key="topic"></span>
+                <span class="eqLogicAttr" data-l1key="configuration" data-l2key="topic" id="topicMQTT"></span>
               </div>
             </div>
 
@@ -227,13 +227,13 @@ function console_log($output, $with_script_tags = true) {
 		<form class="form-horizontal">
 		<fieldset>
 		<br>
-		<div class="form-group">
+		<div class="form-group" id="modelShort">
 		  <label class="col-sm-3 control-label">{{Modèle court}}</label>
 		  <div class="col-sm-6">
 			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelShort"></span>
 		  </div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" id="modelLong">
 		  <label class="col-sm-3 control-label">{{Modèle Long}}</label>
 		  <div class="col-sm-8">
 			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelLong"></span>

@@ -48,6 +48,24 @@ $('.eqLogicAttr[data-l1key=object_id]').on('change', function () {
 });
 
 
+function topicMQTTChange(){
+	// if ($('#topicMQTT').value() == 'yeelight') {
+	if ($('#topicMQTT').value().match('yeelight')) {
+    	$('#pileType').hide();
+		$('#modelShort').hide();
+		$('#modelLong').hide();		
+	}else { 
+		$('#pileType').show();
+		$('#modelShort').show();
+		$('#modelLong').show();		
+	}
+}
+
+$( "#topicMQTT" ).change(function(){
+  setTimeout(topicMQTTChange,100);
+});
+
+
 $(".li_eqLogic").on('click', function (event) {
 	console.log("fonction 1 du Js");    
   if (event.ctrlKey) {

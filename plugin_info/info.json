@@ -11,5 +11,5 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : true,
 	"changelog" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/changelog.html",
-	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/"
+	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/",
 }

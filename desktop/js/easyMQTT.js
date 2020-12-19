@@ -20,6 +20,33 @@
   // document.getElementById("listCol").classList.toggle('col-lg-10');
 // });
 
+function iconChange(){
+//if($('.eqLogicAttr[data-l1key=id]').value() != ''){
+     //icon = $('.eqLogicAttr[data-l1key=configuration][data-l2key=applyDevice]').value();
+        //if(icon == '' || icon == null){
+		icon = null;
+		icon = $('.eqLogicAttr[data-l1key=configuration][data-l2key=modelShort]').value();
+		 //}
+		if(icon != '' && icon != null){
+			console.log("On change l'icone");
+			$('#img_device').attr("src", 'plugins/easyMQTT/core/config/devices/'+icon+'/'+icon+'.png');
+         } else {
+			console.log("On met l'icone par défaut - redondant avec le onerror");
+			$('#img_device').attr("src", 'plugins/easyMQTT/doc/images/easyMQTT_icon.png');
+		}
+// }else{
+ //   $('#img_device').attr("src",'plugins/easyMQTT/doc/images/easyMQTT_icon.png');
+//}
+}
+ // $('.eqLogicAttr[data-l1key=object_id][data-l2key=applyDevice]').on('change', function () {
+  // $('.eqLogicAttr[data-l1key=object_id][data-l2key=applyDevice]').value();
+$('.eqLogicAttr[data-l1key=object_id]').on('change', function () {
+  $('.eqLogicAttr[data-l1key=object_id]').value(); 
+ console.log("On appelle iconChange");
+  setTimeout(iconChange,50);
+});
+
+
 $(".li_eqLogic").on('click', function (event) {
 	console.log("fonction 1 du Js");    
   if (event.ctrlKey) {
@@ -281,3 +308,4 @@ function addCmdToTable(_cmd) {
 		});
 	}
 }
+

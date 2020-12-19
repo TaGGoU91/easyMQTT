@@ -61,13 +61,22 @@ function console_log($output, $with_script_tags = true) {
     <div class="eqLogicThumbnailContainer">
       <?php
       foreach ($eqLogics as $eqLogic) {
-        $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff ; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+        //$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
+		$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+		echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+        //echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff ; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
         echo "<center>";
-        echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
+		
+		
+		if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '/' . $eqLogic->getConfiguration('modelShort') . '.png')) {
+				echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '/' . $eqLogic->getConfiguration('modelShort') . '.png' . '"/>';
+		 } else {
+          echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+        }
+        // echo '<img src="plugins/easyMQTT/plugin_info/easyMQTT_icon.png" height="105" width="95" />';
         echo "</center>";
-        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
-        echo '</div>';
+        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';		
+		echo '</div>';
       }
       ?>
     </div>
@@ -85,8 +94,11 @@ function console_log($output, $with_script_tags = true) {
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
       <div role="tabpanel" class="tab-pane active" id="eqlogictab">
+	  <div class="row">
+	   <div class="col-sm-6">
         <form class="form-horizontal">
           <fieldset>
+		  <br>
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Nom de l'équipement}}</label>
               <div class="col-sm-6">
@@ -148,51 +160,44 @@ function console_log($output, $with_script_tags = true) {
                 <span class="eqLogicAttr" data-l1key="configuration" data-l2key="type"></span>
               </div>
             </div>
+			
+		</fieldset>
+	  </form>
+	</div>
+	
+	<div class="col-sm-6">
+		<form class="form-horizontal">
+		<fieldset>
+		<br>
+		<div class="form-group">
+		  <label class="col-sm-3 control-label">{{Modèle court}}</label>
+		  <div class="col-sm-6">
+			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelShort"></span>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label class="col-sm-3 control-label">{{Modèle Long}}</label>
+		  <div class="col-sm-8">
+			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelLong"></span>
+		  </div>
+		</div>
 
-          <div class="form-group">
-            <label class="col-sm-3 control-label">{{Icone du topic}}</label>
-            <div class="col-sm-6">
-              <select id="sel_icon" class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="icone">
-                <option value="">{{Aucun}}</option>
-                <option value="433">{{RF433}}</option>
-                <option value="barometre">{{Baromètre}}</option>
-                <option value="boiteauxlettres">{{Boite aux Lettres}}</option>
-                <option value="chauffage">{{Chauffage}}</option>
-                <option value="compteur">{{Compteur}}</option>
-                <option value="contact">{{Contact}}</option>
-                <option value="feuille">{{Culture}}</option>
-                <option value="custom">{{Custom}}</option>
-                <option value="dimmer">{{Dimmer}}</option>
-                <option value="energie">{{Energie}}</option>
-                <option value="garage">{{Garage}}</option>
-                <option value="humidity">{{Humidité}}</option>
-                <option value="humiditytemp">{{Humidité et Température}}</option>
-                <option value="hydro">{{Hydrométrie}}</option>
-                <option value="ir2">{{Infra Rouge}}</option>
-                <option value="jauge">{{Jauge}}</option>
-                <option value="light">{{Luminosité}}</option>
-                <option value="meteo">{{Météo}}</option>
-                <option value="motion">{{Mouvement}}</option>
-                <option value="multisensor">{{Multisensor}}</option>
-                <option value="prise">{{Prise}}</option>
-                <option value="relay">{{Relais}}</option>
-                <option value="rfid">{{RFID}}</option>
-                <option value="teleinfo">{{Téléinfo}}</option>
-                <option value="temp">{{Température}}</option>
-                <option value="thermostat">{{Thermostat}}</option>
-                <option value="volet">{{Volet}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <div style="text-align: center">
-              <img name="icon_visu" src="" width="160" height="200"/>
-            </div>
-          </div>
-
+  
+		<div class="form-group">
+		<br>
+			<center>
+			<!--<img src="core/img/no_image.gif" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/easyMQTT/plugin_info/easyMQTT_icon.png'"/>-->
+			<img src="" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/easyMQTT/plugin_info/easyMQTT_icon.png'"/>
+			<!--<img name="icon_visu" src="" width="160" height="200"/>-->
+			</center>
+			<!--<img src="core/img/no_image.gif" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/xiaomihome/plugin_info/xiaomihome_icon.png'"/>-->
+		</div>
+		  
         </fieldset>
       </form>
     </div>
+   </div>
+   </div>
     <div role="tabpanel" class="tab-pane" id="commandtab">
 
       <form class="form-horizontal">
@@ -229,10 +234,10 @@ function console_log($output, $with_script_tags = true) {
 <?php include_file('desktop', 'easyMQTT', 'js', 'easyMQTT'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
 
-<script>
+<!--<script>
 $( "#sel_icon" ).change(function(){
   var text = 'plugins/easyMQTT/plugin_info/node_' + $("#sel_icon").val() + '.png';
   ///////////////////$("#icon_visu").attr('src',text);
   document.icon_visu.src=text;
 });
-</script>
+</script>-->

@@ -467,9 +467,9 @@ class easyMQTT extends eqLogic {
 
 }
 
-// Permet de convertir les couleurs Hexadecimale RGB en un chiffre pour les yeelights
+// Permet de convertir les couleurs Hexadecimale en valeur RGB 
 function hex2rgbrgb($hexhex) {
-	log::add('easyMQTT','debug','Func hex2rgbrgb - on a reçu la valeur : ' . $hexhex);
+	log::add('easyMQTT','debug','Func hex2rgbrgb - Valeur pour hexhex : ' . $hexhex);
 	$hexhex = str_replace("#", "", $hexhex);
 	if(strlen($hexhex) == 3) {
 		$r = hexdec(substr($hexhex,0,1).substr($hexhex,0,1));
@@ -482,9 +482,58 @@ function hex2rgbrgb($hexhex) {
 	}
   
   	//$rgbrgb = array($r, $g, $b);
-	$rgbrgb = $r.$g.$b;
-  	 
-	return $rgbrgb;
+	//$rgbrgb = $r.$g.$b;
+  	 //log::add('easyMQTT','debug','Func hex2rgbrgb - ARRAY rgb : ' . print_r($rgbrgb) );
+	 log::add('easyMQTT','debug','Func hex2rgbrgb - rgb concaténé : ' .$r.','.$g.','.$b);
+	 // return '"'.$r.'","'.$g .'","'.$b.'"';
+	 return $r.','.$g .','.$b;
+	//return $rgbrgb;
+}
+
+ // Permet de convertir des valeurs RGB en XY 
+function convertRGBToXY($red, $green, $blue) {
+		log::add('easyMQTT','debug','Func convertRGBToXY - Valeur pour red : ' . $red);
+		log::add('easyMQTT','debug','Func convertRGBToXY - Valeur pour green : ' . $green);
+		log::add('easyMQTT','debug','Func convertRGBToXY - Valeur pour blue : ' . $blue);
+		$normalizedToOne['red'] = $red / 255; 
+		$normalizedToOne['green'] = $green / 255; 
+		$normalizedToOne['blue'] = $blue / 255; 
+		foreach ($normalizedToOne as $key => $normalized) { 
+			if ($normalized > 0.04045) { 
+				$color[$key] = pow(($normalized + 0.055) / (1.0 + 0.055), 2.4);
+			} else { 
+				$color[$key] = $normalized / 12.92; 
+			} 
+		} 
+		$xyz['x'] = $color['red'] * 0.664511 + $color['green'] * 0.154324 + $color['blue'] * 0.162028; 
+		$xyz['y'] = $color['red'] * 0.283881 + $color['green'] * 0.668433 + $color['blue'] * 0.047685; 
+		$xyz['z'] = $color['red'] * 0.000000 + $color['green'] * 0.072310 + $color['blue'] * 0.986039; 
+		
+		if (array_sum($xyz) == 0) { 
+			$x = 0; $y = 0; 
+		} else { 
+			$x = $xyz['x'] / array_sum($xyz);
+			$y = $xyz['y'] / array_sum($xyz);
+		}
+		return $x . ',' . $y;
+ }
+
+// permet de convertir des valeurs hexadecimale en decimale
+function HexToDez($s) {
+	log::add('easyMQTT','debug','Func HexToDez - Valeur pour $s : ' . $s);
+	$s = str_replace("#", "", $s);
+    $output = 0;
+    for ($i=0; $i<strlen($s); $i++) {
+        $c = $s[$i]; // you don't need substr to get 1 symbol from string
+        if ( ($c >= '0') && ($c <= '9') )
+            $output = $output*16 + ord($c) - ord('0'); // two things: 1. multiple by 16 2. convert digit character to integer
+        elseif ( ($c >= 'A') && ($c <= 'F') ) // care about upper case
+            $output = $output*16 + ord($s[$i]) - ord('A') + 10; // note that we're adding 10
+        elseif ( ($c >= 'a') && ($c <= 'f') ) // care about lower case
+            $output = $output*16 + ord($c) - ord('a') + 10;
+    }
+
+    return $output;
 }
 
 
@@ -511,7 +560,19 @@ class easyMQTTCmd extends cmd {
 		// yeelight alors on convertit la valeur hexadécimale
 		if (stripos($topic,'yeelight') !== false){
 			log::add('easyMQTT','debug','Func execute - C\'est du yeelight pour le Case color : ' . $request);
-			$request = hex2rgbrgb($_options['color']);
+			//$RGBValue = hex2rgbrgb($_options['color']);
+			//$RGBValue = explode(",", $RGBValue);
+						
+			//list($r, $g, $b) = $RGBValue;
+			//log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $r . ' - ' . $g ' . ' $b );
+			// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $RGBValue );
+			// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . print_r($RGBValue) );
+			// $request = convertRGBToXY("25","97","56");
+			// $request = convertRGBToXY($RGBValue[0],$RGBValue[1],$RGBValue[2]);
+			// log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
+			// $request = hex2dec($_options['color']);
+			$request = HexToDez($_options['color']);
+			log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
 		}
 		log::add('easyMQTT','debug','Func execute - Case color : ' . $request);
         break;

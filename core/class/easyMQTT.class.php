@@ -467,23 +467,58 @@ class easyMQTT extends eqLogic {
 
 }
 
+// Permet de convertir les couleurs Hexadecimale RGB en un chiffre pour les yeelights
+function hex2rgbrgb($hexhex) {
+	log::add('easyMQTT','debug','Func hex2rgbrgb - on a reçu la valeur : ' . $hexhex);
+	$hexhex = str_replace("#", "", $hexhex);
+	if(strlen($hexhex) == 3) {
+		$r = hexdec(substr($hexhex,0,1).substr($hexhex,0,1));
+		$g = hexdec(substr($hexhex,1,1).substr($hexhex,1,1));
+		$b = hexdec(substr($hexhex,2,1).substr($hexhex,2,1));
+	} else {
+		$r = hexdec(substr($hexhex,0,2));
+		$g = hexdec(substr($hexhex,2,2));
+		$b = hexdec(substr($hexhex,4,2));
+	}
+  
+  	//$rgbrgb = array($r, $g, $b);
+	$rgbrgb = $r.$g.$b;
+  	 
+	return $rgbrgb;
+}
+
+
 class easyMQTTCmd extends cmd {
   public function execute($_options = null) {
 	  log::add('easyMQTT','debug','Func execute - easyMQTT.class.php');
     switch ($this->getType()) {
       case 'action' :
+	  log::add('easyMQTT','debug','Func execute - type : ' . $this->getType());
+	  log::add('easyMQTT','debug','Func execute - subType : ' . $this->getSubType());
       $request = $this->getConfiguration('request','1');
+	  log::add('easyMQTT','debug','Func execute - request : ' . $request);
       $topic = $this->getConfiguration('topic');
+	  log::add('easyMQTT','debug','Func execute - Contenu de topic : '. $topic);
       switch ($this->getSubType()) {
         case 'slider':
-        $request = str_replace('#slider#', $_options['slider'], $request);
+        //$request = str_replace('#slider#', $_options['slider'], $request);
+		$request = $_options['slider'];
+		log::add('easyMQTT','debug','Func execute - Case Slider : ' . $request);
         break;
         case 'color':
-        $request = str_replace('#color#', $_options['color'], $request);
+        //$request = str_replace('#color#', $_options['color'], $request);
+		log::add('easyMQTT','debug','Func execute - Case color  contenu de $_options[color] : ' . $_options['color']);
+		// yeelight alors on convertit la valeur hexadécimale
+		if (stripos($topic,'yeelight') !== false){
+			log::add('easyMQTT','debug','Func execute - C\'est du yeelight pour le Case color : ' . $request);
+			$request = hex2rgbrgb($_options['color']);
+		}
+		log::add('easyMQTT','debug','Func execute - Case color : ' . $request);
         break;
         case 'message':
         $request = str_replace('#title#', $_options['title'], $request);
         $request = str_replace('#message#', $_options['message'], $request);
+		log::add('easyMQTT','debug','Func execute - Case message : ' . $request);
         break;
       }
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));

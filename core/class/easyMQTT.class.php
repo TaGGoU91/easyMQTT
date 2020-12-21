@@ -303,6 +303,7 @@ class easyMQTT extends eqLogic {
 					log::add('easyMQTT', 'debug', 'Valeur de topicJson : '. $topicJson .'');
 					$elogic = self::byLogicalId($eqLogicId, 'easyMQTT');
 					if (!is_object($elogic)) {
+					  log::add('easyMQTT', 'info', 'Création de l\'équipement : '. $eqLogicName);
 					  $elogic = new easyMQTT();
 					  $elogic->setEqType_name('easyMQTT');
 					  $elogic->setLogicalId($eqLogicId);

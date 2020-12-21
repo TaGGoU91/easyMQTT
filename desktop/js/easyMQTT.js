@@ -53,11 +53,14 @@ function topicMQTTChange(){
 	if ($('#topicMQTT').value().match('yeelight')) {
     	$('#pileType').hide();
 		$('#modelShort').hide();
-		$('#modelLong').hide();		
+		$('#modelLong').hide();
+		$('#sel_icon').show();
+		$('#img_device').attr("src", 'plugins/easyMQTT/core/config/yeelight/' + $("#sel_icon").val() + '.png');		
 	}else { 
 		$('#pileType').show();
 		$('#modelShort').show();
-		$('#modelLong').show();		
+		$('#modelLong').show();
+		$('#sel_icon').hide();	
 	}
 }
 
@@ -65,6 +68,12 @@ $( "#topicMQTT" ).change(function(){
   setTimeout(topicMQTTChange,100);
 });
 
+$( "#sel_icon" ).change(function(){
+  ///////////////////////var text = 'plugins/easyMQTT/core/config/yeelight/' + $("#sel_icon").val() + '.png';
+  $('#img_device').attr("src", 'plugins/easyMQTT/core/config/yeelight/' + $("#sel_icon").val() + '.png');
+  ///////////////////$("#icon_visu").attr('src',text);
+ //////////////// document.icon_visu.src=text;
+});
 
 $(".li_eqLogic").on('click', function (event) {
 	console.log("fonction 1 du Js");    
@@ -165,7 +174,7 @@ $("#butCol").click(function(){
    console.log("Réalignement des équipements suite au resize");    
    window.dispatchEvent(new Event('resize'));
  });
-
+ 
 // $(".li_eqLogic").on('click', function (event) {
   // if (event.ctrlKey) {
     // var type = $('body').attr('data-page')

@@ -239,7 +239,39 @@ function console_log($output, $with_script_tags = true) {
 			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelLong"></span>
 		  </div>
 		</div>
+		
 
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Icone de l'équipement}}</label>
+			<div class="col-sm-5">
+			  <select id="sel_icon" class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="icone">
+				<option value="">{{Aucun}}</option>				
+				<option value="bslamp1">{{Bed Side Lamp 1}}</option>
+				<option value="bslamp2">{{Bed Side Lamp 2}}</option>
+				<option value="bslamp3">{{Bed Side Lamp 3}}</option>				
+				<option value="ceiling1">{{Ceiling 1}}</option>
+				<option value="ceiling2">{{Ceiling 2}}</option>
+				<option value="ceiling3">{{Ceiling 3}}</option>
+				<option value="ceiling4">{{Ceiling 4}}</option>
+				<option value="ceiling5">{{Ceiling 5}}</option>
+				<option value="ceiling6">{{Ceiling 6}}</option>
+				<option value="ceiling7">{{Ceiling 7}}</option>				
+				<option value="color1">{{Ampoule RGB}}</option>
+				<option value="ct1">{{Ampoule Blanche 1}}</option>
+				<option value="ct2">{{Ampoule Blanche 2}}</option>
+				<option value="ct3">{{Ampoule Blanche 3}}</option>
+				<option value="desklamp1">{{Lampe de bureau 1}}</option>
+				<option value="desklamp2">{{Lampe de Bureau 2}}</option>				
+				<option value="strip1">{{Strip 1}}</option>
+				<option value="strip2">{{Strip 2}}</option>
+			  </select>
+			</div>
+		</div>
+	  <!--<div class="form-group">
+		<div style="text-align: center">
+		  <img name="icon_visu" src="" width="160" height="200"/>
+		</div>
+	  </div>-->
   
 		<div class="form-group">
 		<br>

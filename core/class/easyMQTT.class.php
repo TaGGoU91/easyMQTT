@@ -238,6 +238,10 @@ class easyMQTT extends eqLogic {
 						$cmdlogic->setSubType('slider');
 					}elseif (stripos($cmdId,'rgb') !== false){
 						$cmdlogic->setSubType('color');
+					}elseif (stripos($cmdId,'ct') !== false){
+						$cmdlogic->setSubType('slider');
+						$cmdlogic->setConfiguration('minValue', 0);
+						$cmdlogic->setConfiguration('maxValue', 100);
 					}else {
 						$cmdlogic->setSubType('other');
 					}
@@ -483,8 +487,6 @@ function hex2rgbrgb($hexhex) {
   
   	//$rgbrgb = array($r, $g, $b);
 	//$rgbrgb = $r.$g.$b;
-  	 //log::add('easyMQTT','debug','Func hex2rgbrgb - ARRAY rgb : ' . print_r($rgbrgb) );
-	 log::add('easyMQTT','debug','Func hex2rgbrgb - rgb concaténé : ' .$r.','.$g.','.$b);
 	 // return '"'.$r.'","'.$g .'","'.$b.'"';
 	 return $r.','.$g .','.$b;
 	//return $rgbrgb;
@@ -518,7 +520,7 @@ function convertRGBToXY($red, $green, $blue) {
 		return $x . ',' . $y;
  }
 
-// permet de convertir des valeurs hexadecimale en decimale
+// permet de convertir des valeurs hexadecimale en decimale (pour yeelight par exemple)
 function HexToDez($s) {
 	log::add('easyMQTT','debug','Func HexToDez - Valeur pour $s : ' . $s);
 	$s = str_replace("#", "", $s);

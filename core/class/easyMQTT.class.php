@@ -236,7 +236,7 @@ class easyMQTT extends eqLogic {
 					$cmdlogic->setEqType('easyMQTT');
 					if (stripos($cmdId,'bright') !== false){
 						$cmdlogic->setSubType('slider');
-						$cmdlogic->setConfiguration('minValue', 0);
+						$cmdlogic->setConfiguration('minValue', 1);
 						$cmdlogic->setConfiguration('maxValue', 100);
 					}elseif (stripos($cmdId,'rgb') !== false){
 						$cmdlogic->setSubType('color');

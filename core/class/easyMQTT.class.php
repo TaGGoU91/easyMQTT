@@ -360,7 +360,7 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic->setConfiguration('topic', $topicJson);
 							  $cmdlogic->save();
 							  $elogic->checkAndUpdateCmd($eqCmdId,$value);
-							}elseif($exposes['access'] == 'rw'){
+							}elseif($exposes['access'] == 'rw'  || $exposes['access'] == '7'){
 							  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();
@@ -388,7 +388,7 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic->save();
 							  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 							  
-							}elseif($exposes['access'] == 'w'){
+							}elseif($exposes['access'] == 'w'  || $exposes['access'] == '2'){
 							  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();

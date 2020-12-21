@@ -342,7 +342,7 @@ class easyMQTT extends eqLogic {
 						log::add('easyMQTT', 'debug', 'Valeur de topicJson : ' . $topicJson . ' pour l\'équipement '. $eqLogicName);
 						$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$eqCmdId);
 						if (!is_object($cmdlogic)) {
-						  if($exposes['access'] == 'r'){
+						  if($exposes['access'] == 'r' || $exposes['access'] == '1'){
 							  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();

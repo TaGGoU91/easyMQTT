@@ -332,7 +332,7 @@ class easyMQTT extends eqLogic {
 						}						
 					// utiliser isset(exposes['features']) pour remplacer le array_key_exists 
 						if (isset($exposes['features'])) {
-							log::add('easyMQTT', 'debug', '---------------------- La clef features a été trouvé dans le tableau exposes, donc on traite différement les données');
+							log::add('easyMQTT', 'debug', '---------------------- La clef features a été trouvée dans le tableau exposes, donc on traite différement les données');
 							foreach($value['definition']['exposes']['features'] as $feature){
 								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][access]  : '. $feature['access'] .'');
 								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][name] : '. $feature['name'] .'');

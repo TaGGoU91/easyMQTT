@@ -277,7 +277,7 @@ function console_log($output, $with_script_tags = true) {
 		<br>
 			<center>
 			<!--<img src="core/img/no_image.gif" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/easyMQTT/plugin_info/easyMQTT_icon.png'"/>-->
-			<img src="" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/easyMQTT/plugin_info/easyMQTT_icon.png'"/>
+			<img src="" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 125px;"  onerror="this.src='plugins/easyMQTT/plugin_info/easyMQTT_icon.png'"/>
 			<!--<img name="icon_visu" src="" width="160" height="200"/>-->
 			</center>
 			<!--<img src="core/img/no_image.gif" data-original=".jpg" id="img_device" class="img-responsive" style="max-height : 250px;"  onerror="this.src='plugins/xiaomihome/plugin_info/xiaomihome_icon.png'"/>-->

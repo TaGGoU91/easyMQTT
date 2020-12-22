@@ -324,17 +324,103 @@ class easyMQTT extends eqLogic {
 					
 					foreach($value['definition']['exposes'] as $exposes){
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes] : '. print_r($exposes, true) .'');
+						$firstPart = explode("/", $message->topic);
 						
-						if (array_key_exists('features', $exposes)) {
-							log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
-						}
+						
+						// if (array_key_exists('features', $exposes)) {
+							// log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
+						// }						
+					// utiliser isset(exposes['features']) pour remplacer le array_key_exists 
+						if (isset(exposes['features'])) {
+							log::add('easyMQTT', 'debug', '---------------------- La clef features a été trouvé dans le tableau exposes, donc on traite différement les données');
+							foreach($value['definition']['exposes']['features'] as $feature){
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][access]  : '. $feature['access'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][name] : '. $feature['name'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][property] : '. $feature['property'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][type]  : '. $feature['type'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][unit]  : '. $feature['unit'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][value_max]  : '. $feature['value_max'] .'');
+								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][value_min]  : '. $feature['value_min'] .'');
+								$eqCmdId = $feature['name'];
+								$topicJson = $firstPart[0] . '/' . $value['friendly_name'] .'{' . $feature['property'] . '}'; # ici création de la commande pour le topic associé à la commande
+								log::add('easyMQTT', 'debug', 'Valeur de topicJson : ' . $topicJson . ' pour l\'équipement '. $eqLogicName);
+								
+								$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$eqCmdId);
+								if (!is_object($cmdlogic)) {
+								  if($feature['access'] == 'r' || $feature['access'] == '1' || $feature['access'] == '5'){
+									  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'info', 'Création d\'une commande');
+									  $cmdlogic = new easyMQTTCmd();
+									  $cmdlogic->setEqLogic_id($elogic->getId());
+									  $cmdlogic->setEqType('easyMQTT');
+									  if($feature['type'] == 'enum'){
+										$cmdlogic->setSubType('string');
+									  }else{
+										$cmdlogic->setSubType($feature['type']);
+									  }
+									  $cmdlogic->setLogicalId($eqCmdId);
+									  $cmdlogic->setType('info');						  
+									  $cmdlogic->setName($feature['name']);
+									  $cmdlogic->setUnite($feature['unit']);
+									  $cmdlogic->setConfiguration('topic', $topicJson);
+									  $cmdlogic->save();
+									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
+									}elseif($feature['access'] == 'rw'  || $feature['access'] == '7'){
+									  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'info', 'Création d\'une commande');
+									  $cmdlogic = new easyMQTTCmd();
+									  $cmdlogic->setEqLogic_id($elogic->getId());
+									  $cmdlogic->setEqType('easyMQTT');
+									  #$cmdlogic->setSubType($feature['type']);
+									  $cmdlogic->setLogicalId('r-'.$eqCmdId);
+									  $cmdlogic->setType('action');						  
+									  $cmdlogic->setName($feature['name']);
+									  $cmdlogic->setUnite($feature['unit']);
+									  $cmdlogic->setConfiguration('topic', $topicJson);
+									  $cmdlogic->save();
+									  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
+									  
+									  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'info', 'Création d\'une commande');
+									  $cmdlogic = new easyMQTTCmd();
+									  $cmdlogic->setEqLogic_id($elogic->getId());
+									  $cmdlogic->setEqType('easyMQTT');
+									  #$cmdlogic->setSubType($feature['type']);
+									  $cmdlogic->setLogicalId('w-'.$eqCmdId);
+									  $cmdlogic->setType('info');						  
+									  $cmdlogic->setName($feature['name']);
+									  $cmdlogic->setConfiguration('topic', $topicJson);
+									  $cmdlogic->save();
+									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
+									  
+									}elseif($feature['access'] == 'w'  || $feature['access'] == '2'){
+									  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'info', 'Création d\'une commande');
+									  $cmdlogic = new easyMQTTCmd();
+									  $cmdlogic->setEqLogic_id($elogic->getId());
+									  $cmdlogic->setEqType('easyMQTT');
+									  $cmdlogic->setSubType($feature['type']);
+									  $cmdlogic->setLogicalId($eqCmdId);
+									  $cmdlogic->setType('action');						  
+									  $cmdlogic->setName($feature['name']);
+									  $cmdlogic->setConfiguration('topic', $topicJson);
+									  $cmdlogic->save();
+									 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
+									}else{
+											log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
+									}
+								}
+								
+							}
+						} 
+					
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][access]  : '. $exposes['access'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][name] : '. $exposes['name'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][property] : '. $exposes['property'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][type]  : '. $exposes['type'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][unit]  : '. $exposes['unit'] .'');
 						
-						$firstPart = explode("/", $message->topic);
+						//$firstPart = explode("/", $message->topic);
 						#log::add('easyMQTT', 'debug', 'Valeur de firstPart si Array : '. print_r($firstPart) .'');
 						#log::add('easyMQTT', 'debug', 'Valeur de firstPart[0] : '. $firstPart[0] .'');
 						// $eqCmdName = $exposes['name'].' - '.$value['definition']['model'];
@@ -347,7 +433,7 @@ class easyMQTT extends eqLogic {
 						log::add('easyMQTT', 'debug', 'Valeur de topicJson : ' . $topicJson . ' pour l\'équipement '. $eqLogicName);
 						$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$eqCmdId);
 						if (!is_object($cmdlogic)) {
-						  if($exposes['access'] == 'r' || $exposes['access'] == '1'){
+						  if($exposes['access'] == 'r' || $exposes['access'] == '1' || $exposes['access'] == '5'){
 							  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();

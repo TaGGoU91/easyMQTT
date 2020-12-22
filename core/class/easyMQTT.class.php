@@ -430,7 +430,7 @@ class easyMQTT extends eqLogic {
 										$cmdlogic->setSubType('other');
 									  }
 									  //$cmdlogic->setSubType($feature['type']);
-									  $cmdlogic->setLogicalId($eqCmdId);
+									  $cmdlogic->setLogicalId('w-'.$eqCmdId);
 									  $cmdlogic->setType('action');						  
 									  $cmdlogic->setName($feature['name']);
 									  $cmdlogic->setConfiguration('topic', $topicJson);
@@ -544,7 +544,7 @@ class easyMQTT extends eqLogic {
 								$cmdlogic->setSubType('other');
 							  }
 							  //$cmdlogic->setSubType($exposes['type']);
-							  $cmdlogic->setLogicalId($eqCmdId);
+							  $cmdlogic->setLogicalId('w-'.$eqCmdId);
 							  $cmdlogic->setType('action');						  
 							  $cmdlogic->setName($exposes['name']);
 							  $cmdlogic->setConfiguration('topic', $topicJson);

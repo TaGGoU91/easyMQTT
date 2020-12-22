@@ -331,7 +331,7 @@ class easyMQTT extends eqLogic {
 							// log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
 						// }						
 					// utiliser isset(exposes['features']) pour remplacer le array_key_exists 
-						if (isset(exposes['features'])) {
+						if (isset($exposes['features'])) {
 							log::add('easyMQTT', 'debug', '---------------------- La clef features a été trouvé dans le tableau exposes, donc on traite différement les données');
 							foreach($value['definition']['exposes']['features'] as $feature){
 								log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][features][access]  : '. $feature['access'] .'');
@@ -440,7 +440,7 @@ class easyMQTT extends eqLogic {
 								}
 								
 							}
-						} 
+						}else { 
 					
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][access]  : '. $exposes['access'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][name] : '. $exposes['name'] .'');
@@ -521,13 +521,14 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic->save();
 							 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
 							}else{
-									log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de TYPE pour la commande');
+									log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
 							}
 						}
 												
 						// cmd::setGeneric_Type
 						// setGeneric_type(  $_generic_type)
 					}
+				}
 				}else {
 					log::add('easyMQTT', 'debug', 'On va chercher un équipement existant afin de mettre à jour les commandes qui lui sont associées');
 					log::add('easyMQTT', 'debug', 'Valeur de equipment : '. $equipment);

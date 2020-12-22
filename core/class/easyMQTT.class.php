@@ -348,7 +348,7 @@ class easyMQTT extends eqLogic {
 								$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$eqCmdId);
 								if (!is_object($cmdlogic)) {
 								  if($feature['access'] == 'r' || $feature['access'] == '1' || $feature['access'] == '5'){
-									  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'debug', 'Création de la commande info - 1/5/r: ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 									  log::add('easyMQTT', 'info', 'Création d\'une commande');
 									  $cmdlogic = new easyMQTTCmd();
 									  $cmdlogic->setEqLogic_id($elogic->getId());
@@ -366,12 +366,26 @@ class easyMQTT extends eqLogic {
 									  $cmdlogic->save();
 									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									}elseif($feature['access'] == 'rw'  || $feature['access'] == '7'){
-									  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'debug', 'Création de la commande action - 7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 									  log::add('easyMQTT', 'info', 'Création d\'une commande');
 									  $cmdlogic = new easyMQTTCmd();
 									  $cmdlogic->setEqLogic_id($elogic->getId());
 									  $cmdlogic->setEqType('easyMQTT');
-									  #$cmdlogic->setSubType($feature['type']);
+									  if (stripos($feature['type'],'Enum') !== false){
+										$cmdlogic->setSubType('slider');
+										// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+										// $cmdlogic->setConfiguration('minValue', 1);
+										// $cmdlogic->setConfiguration('maxValue', 100);
+									  //}//elseif (stripos($cmdId,'rgb') !== false){
+										//$cmdlogic->setSubType('color');
+									  //}elseif ($cmdId === "ct-Action"){
+									//	$cmdlogic->setSubType('slider');
+										//$cmdlogic->setConfiguration('minValue', 1700);
+										// $cmdlogic->setConfiguration('maxValue', 6500);
+									  }else {
+										$cmdlogic->setSubType('other');
+									  }
+									  //$cmdlogic->setSubType($feature['type']);
 									  $cmdlogic->setLogicalId('r-'.$eqCmdId);
 									  $cmdlogic->setType('action');						  
 									  $cmdlogic->setName($feature['name']);
@@ -380,7 +394,7 @@ class easyMQTT extends eqLogic {
 									  $cmdlogic->save();
 									  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  
-									  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'debug', 'Création de la commande info -7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 									  log::add('easyMQTT', 'info', 'Création d\'une commande');
 									  $cmdlogic = new easyMQTTCmd();
 									  $cmdlogic->setEqLogic_id($elogic->getId());
@@ -394,7 +408,7 @@ class easyMQTT extends eqLogic {
 									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  
 									}elseif($feature['access'] == 'w'  || $feature['access'] == '2'){
-									  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+									  log::add('easyMQTT', 'debug', 'Création de la commande action - 2/w: ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 									  log::add('easyMQTT', 'info', 'Création d\'une commande');
 									  $cmdlogic = new easyMQTTCmd();
 									  $cmdlogic->setEqLogic_id($elogic->getId());

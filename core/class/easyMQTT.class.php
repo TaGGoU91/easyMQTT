@@ -499,6 +499,20 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic = new easyMQTTCmd();
 							  $cmdlogic->setEqLogic_id($elogic->getId());
 							  $cmdlogic->setEqType('easyMQTT');
+							  if (stripos($exposes['type'],'Enum') !== false){
+								$cmdlogic->setSubType('slider');
+								// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+								// $cmdlogic->setConfiguration('minValue', 1);
+								// $cmdlogic->setConfiguration('maxValue', 100);
+							  //}//elseif (stripos($cmdId,'rgb') !== false){
+								//$cmdlogic->setSubType('color');
+							  //}elseif ($cmdId === "ct-Action"){
+							//	$cmdlogic->setSubType('slider');
+								//$cmdlogic->setConfiguration('minValue', 1700);
+								// $cmdlogic->setConfiguration('maxValue', 6500);
+							  }else {
+								$cmdlogic->setSubType('other');
+							  }
 							  #$cmdlogic->setSubType($exposes['type']);
 							  $cmdlogic->setLogicalId('w-'.$eqCmdId);
 							  $cmdlogic->setType('info');						  
@@ -513,7 +527,21 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic = new easyMQTTCmd();
 							  $cmdlogic->setEqLogic_id($elogic->getId());
 							  $cmdlogic->setEqType('easyMQTT');
-							  $cmdlogic->setSubType($exposes['type']);
+							  if (stripos($exposes['type'],'Enum') !== false){
+								$cmdlogic->setSubType('slider');
+								// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+								// $cmdlogic->setConfiguration('minValue', 1);
+								// $cmdlogic->setConfiguration('maxValue', 100);
+							  //}//elseif (stripos($cmdId,'rgb') !== false){
+								//$cmdlogic->setSubType('color');
+							  //}elseif ($cmdId === "ct-Action"){
+							//	$cmdlogic->setSubType('slider');
+								//$cmdlogic->setConfiguration('minValue', 1700);
+								// $cmdlogic->setConfiguration('maxValue', 6500);
+							  }else {
+								$cmdlogic->setSubType('other');
+							  }
+							  //$cmdlogic->setSubType($exposes['type']);
 							  $cmdlogic->setLogicalId($eqCmdId);
 							  $cmdlogic->setType('action');						  
 							  $cmdlogic->setName($exposes['name']);

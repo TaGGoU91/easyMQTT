@@ -324,6 +324,10 @@ class easyMQTT extends eqLogic {
 					
 					foreach($value['definition']['exposes'] as $exposes){
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes] : '. print_r($exposes, true) .'');
+						
+						if (array_key_exists('features', $exposes)) {
+							log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
+						}
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][access]  : '. $exposes['access'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][name] : '. $exposes['name'] .'');
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes][property] : '. $exposes['property'] .'');

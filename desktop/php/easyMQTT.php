@@ -109,8 +109,8 @@ function console_log($output, $with_script_tags = true) {
 				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
 				echo "<center>";
 					
-				if (file_exists(dirname(__FILE__) . '/../../core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg')) {
-						echo '<img src="plugins/easyMQTT/core/config/devices/' . $eqLogic->getConfiguration('modelShort') . '.jpg' . '"/>';
+				if (file_exists(dirname(__FILE__) . '/../../core/config/yeelight/' . $eqLogic->getConfiguration('icone') . '.png')) {
+						echo '<img src="plugins/easyMQTT/core/config/yeelight/' . $eqLogic->getConfiguration('icone') . '.png' . '"/>';
 				 } else {
 				  echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
 				}

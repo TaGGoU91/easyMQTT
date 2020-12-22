@@ -368,74 +368,81 @@ class easyMQTT extends eqLogic {
 									  $cmdlogic->save();
 									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									}elseif($feature['access'] == 'rw'  || $feature['access'] == '7'){
-									  log::add('easyMQTT', 'debug', 'Création de la commande action - 7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
-									  log::add('easyMQTT', 'info', 'Création d\'une commande');
-									  $cmdlogic = new easyMQTTCmd();
-									  $cmdlogic->setEqLogic_id($elogic->getId());
-									  $cmdlogic->setEqType('easyMQTT');
-									  if (stripos($feature['type'],'Enum') !== false){
-										$cmdlogic->setSubType('slider');
-										// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
-										// $cmdlogic->setConfiguration('minValue', 1);
-										// $cmdlogic->setConfiguration('maxValue', 100);
-									  //}//elseif (stripos($cmdId,'rgb') !== false){
-										//$cmdlogic->setSubType('color');
-									  //}elseif ($cmdId === "ct-Action"){
-									//	$cmdlogic->setSubType('slider');
-										//$cmdlogic->setConfiguration('minValue', 1700);
-										// $cmdlogic->setConfiguration('maxValue', 6500);
-									  }else {
-										$cmdlogic->setSubType('other');
+									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'r-'.$eqCmdId);
+									  if (!is_object($cmdlogic)) {
+										  log::add('easyMQTT', 'debug', 'Création de la commande action - 7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+										  log::add('easyMQTT', 'info', 'Création d\'une commande');
+										  $cmdlogic = new easyMQTTCmd();
+										  $cmdlogic->setEqLogic_id($elogic->getId());
+										  $cmdlogic->setEqType('easyMQTT');
+										  if (stripos($feature['type'],'Enum') !== false){
+											$cmdlogic->setSubType('slider');
+											// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+											// $cmdlogic->setConfiguration('minValue', 1);
+											// $cmdlogic->setConfiguration('maxValue', 100);
+										  //}//elseif (stripos($cmdId,'rgb') !== false){
+											//$cmdlogic->setSubType('color');
+										  //}elseif ($cmdId === "ct-Action"){
+										//	$cmdlogic->setSubType('slider');
+											//$cmdlogic->setConfiguration('minValue', 1700);
+											// $cmdlogic->setConfiguration('maxValue', 6500);
+										  }else {
+											$cmdlogic->setSubType('other');
+										  }
+										  //$cmdlogic->setSubType($feature['type']);
+										  $cmdlogic->setLogicalId('r-'.$eqCmdId);
+										  $cmdlogic->setType('action');						  
+										  $cmdlogic->setName($feature['name']);
+										  $cmdlogic->setUnite($feature['unit']);
+										  $cmdlogic->setConfiguration('topic', $topicJson);
+										  $cmdlogic->save();
+										  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
+									  }	
+									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'w-'.$eqCmdId);
+									  if (!is_object($cmdlogic)) {  
+										  log::add('easyMQTT', 'debug', 'Création de la commande info -7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+										  log::add('easyMQTT', 'info', 'Création d\'une commande');
+										  $cmdlogic = new easyMQTTCmd();
+										  $cmdlogic->setEqLogic_id($elogic->getId());
+										  $cmdlogic->setEqType('easyMQTT');
+										  #$cmdlogic->setSubType($feature['type']);
+										  $cmdlogic->setLogicalId('w-'.$eqCmdId);
+										  $cmdlogic->setType('info');						  
+										  $cmdlogic->setName($feature['name']);
+										  $cmdlogic->setConfiguration('topic', $topicJson);
+										  $cmdlogic->save();
+										  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  }
-									  //$cmdlogic->setSubType($feature['type']);
-									  $cmdlogic->setLogicalId('r-'.$eqCmdId);
-									  $cmdlogic->setType('action');						  
-									  $cmdlogic->setName($feature['name']);
-									  $cmdlogic->setUnite($feature['unit']);
-									  $cmdlogic->setConfiguration('topic', $topicJson);
-									  $cmdlogic->save();
-									  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
-									  
-									  log::add('easyMQTT', 'debug', 'Création de la commande info -7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
-									  log::add('easyMQTT', 'info', 'Création d\'une commande');
-									  $cmdlogic = new easyMQTTCmd();
-									  $cmdlogic->setEqLogic_id($elogic->getId());
-									  $cmdlogic->setEqType('easyMQTT');
-									  #$cmdlogic->setSubType($feature['type']);
-									  $cmdlogic->setLogicalId('w-'.$eqCmdId);
-									  $cmdlogic->setType('info');						  
-									  $cmdlogic->setName($feature['name']);
-									  $cmdlogic->setConfiguration('topic', $topicJson);
-									  $cmdlogic->save();
-									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
-									  
 									}elseif($feature['access'] == 'w'  || $feature['access'] == '2'){
-									  log::add('easyMQTT', 'debug', 'Création de la commande action - 2/w: ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
-									  log::add('easyMQTT', 'info', 'Création d\'une commande');
-									  $cmdlogic = new easyMQTTCmd();
-									  $cmdlogic->setEqLogic_id($elogic->getId());
-									  $cmdlogic->setEqType('easyMQTT');
-									  if (stripos($feature['type'],'Enum') !== false){
-										$cmdlogic->setSubType('slider');
-										// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
-										// $cmdlogic->setConfiguration('minValue', 1);
-										// $cmdlogic->setConfiguration('maxValue', 100);
-									  //}//elseif (stripos($cmdId,'rgb') !== false){
-										//$cmdlogic->setSubType('color');
-									  //}elseif ($cmdId === "ct-Action"){
-									//	$cmdlogic->setSubType('slider');
-										//$cmdlogic->setConfiguration('minValue', 1700);
-										// $cmdlogic->setConfiguration('maxValue', 6500);
-									  }else {
-										$cmdlogic->setSubType('other');
+									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'w-'.$eqCmdId);
+									  if (!is_object($cmdlogic)) {  	
+										  log::add('easyMQTT', 'debug', 'Création de la commande action - 2/w: ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
+										  log::add('easyMQTT', 'info', 'Création d\'une commande');
+										  $cmdlogic = new easyMQTTCmd();
+										  $cmdlogic->setEqLogic_id($elogic->getId());
+										  $cmdlogic->setEqType('easyMQTT');
+										  if (stripos($feature['type'],'Enum') !== false){
+											$cmdlogic->setSubType('slider');
+											// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+											// $cmdlogic->setConfiguration('minValue', 1);
+											// $cmdlogic->setConfiguration('maxValue', 100);
+										  //}//elseif (stripos($cmdId,'rgb') !== false){
+											//$cmdlogic->setSubType('color');
+										  //}elseif ($cmdId === "ct-Action"){
+										//	$cmdlogic->setSubType('slider');
+											//$cmdlogic->setConfiguration('minValue', 1700);
+											// $cmdlogic->setConfiguration('maxValue', 6500);
+										  }else {
+											$cmdlogic->setSubType('other');
+										  }
+										  //$cmdlogic->setSubType($feature['type']);
+										  $cmdlogic->setLogicalId('2-'.$eqCmdId);
+										  $cmdlogic->setType('action');						  
+										  $cmdlogic->setName($feature['name']);
+										  $cmdlogic->setConfiguration('topic', $topicJson);
+										  $cmdlogic->save();
+										 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  }
-									  //$cmdlogic->setSubType($feature['type']);
-									  $cmdlogic->setLogicalId('w-'.$eqCmdId);
-									  $cmdlogic->setType('action');						  
-									  $cmdlogic->setName($feature['name']);
-									  $cmdlogic->setConfiguration('topic', $topicJson);
-									  $cmdlogic->save();
-									 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									}else{
 											log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
 									}

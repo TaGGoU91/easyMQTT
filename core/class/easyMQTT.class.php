@@ -327,9 +327,9 @@ class easyMQTT extends eqLogic {
 						$firstPart = explode("/", $message->topic);
 						
 						
-						// if (array_key_exists('features', $exposes)) {
-							// log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
-						// }						
+						if (array_key_exists('features', $exposes)) {
+							log::add('easyMQTT', 'debug', '---------------------- L\'élément features a été trouvé dans le tableau exposes');
+						}						
 					// utiliser isset(exposes['features']) pour remplacer le array_key_exists 
 						if (isset($exposes['features'])) {
 							log::add('easyMQTT', 'debug', '---------------------- La clef features a été trouvé dans le tableau exposes, donc on traite différement les données');

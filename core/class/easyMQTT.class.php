@@ -301,6 +301,7 @@ class easyMQTT extends eqLogic {
 					$firstPart = explode("/", $message->topic); 
 					$topicJson = $firstPart[0] . '/' . $value['friendly_name'] ;
 					log::add('easyMQTT', 'debug', 'Valeur de topicJson : '. $topicJson .'');
+					$modelShort = str_replace("/", "-", $value['definition']['model']);
 					$elogic = self::byLogicalId($eqLogicId, 'easyMQTT');
 					if (!is_object($elogic)) {
 					  log::add('easyMQTT', 'info', 'Création de l\'équipement : '. $eqLogicName);
@@ -311,7 +312,8 @@ class easyMQTT extends eqLogic {
 					  // $elogic->setConfiguration('topic', $nodeid);
 					  $elogic->setConfiguration('topic', $topicJson);
 					  $elogic->setConfiguration('type', $type);
-					  $elogic->setConfiguration('modelShort', $value['definition']['model']);					  
+					  // $elogic->setConfiguration('modelShort', $value['definition']['model']);					  
+					  $elogic->setConfiguration('modelShort', $modelShort);					  
 					  $elogic->setConfiguration('modelLong', $value['definition']['description']);					  
 					  log::add('easyMQTT', 'info', 'Saving device ' . $eqLogicId);
 					  $elogic->save();
@@ -319,8 +321,7 @@ class easyMQTT extends eqLogic {
 					$elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
 					$elogic->setConfiguration('type','zigbee');
 					$elogic->save();
-					
-					
+										
 					
 					foreach($value['definition']['exposes'] as $exposes){
 						log::add('easyMQTT', 'debug', 'Valeur de [definition][exposes] : '. print_r($exposes, true) .'');
@@ -356,7 +357,8 @@ class easyMQTT extends eqLogic {
 									  $cmdlogic = new easyMQTTCmd();
 									  $cmdlogic->setEqLogic_id($elogic->getId());
 									  $cmdlogic->setEqType('easyMQTT');
-									  if($feature['type'] == 'enum'){
+									  // if($feature['type'] == 'enum'){
+									  if(stripos($feature['type'],'Enum') !== false){
 										$cmdlogic->setSubType('string');
 									  }else{
 										$cmdlogic->setSubType($feature['type']);
@@ -369,7 +371,7 @@ class easyMQTT extends eqLogic {
 									  $cmdlogic->save();
 									  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									}elseif($feature['access'] == 'rw'  || $feature['access'] == '7'){
-									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'r-'.$eqCmdId);
+									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'w-'.$eqCmdId);
 									  if (!is_object($cmdlogic)) {
 										  log::add('easyMQTT', 'debug', 'Création de la commande action - 7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 										  log::add('easyMQTT', 'info', 'Création d\'une commande');
@@ -383,23 +385,39 @@ class easyMQTT extends eqLogic {
 											// $cmdlogic->setConfiguration('maxValue', 100);
 										  //}//elseif (stripos($cmdId,'rgb') !== false){
 											//$cmdlogic->setSubType('color');
+											}elseif (stripos($feature['type'],'enum') !== false){
+											  $cmdlogic->setSubType('select');
+											foreach($feature['values'] as $enumValue){
+												$cmdlogic->setConfiguration('listValue','value|'.$enumValue.';value2|'.$enumValue);
+											}
 										  //}elseif ($cmdId === "ct-Action"){
 										//	$cmdlogic->setSubType('slider');
 											//$cmdlogic->setConfiguration('minValue', 1700);
 											// $cmdlogic->setConfiguration('maxValue', 6500);
+										  }elseif (stripos($feature['type'],'numeric') !== false){
+											if(isset($feature['value_max'])){
+												$cmdlogic->setSubType('slider');
+												$cmdlogic->setConfiguration('maxValue', $feature['value_max']);
+											}elseif (isset($feature['value_min'])){
+												$cmdlogic->setSubType('slider');
+												$cmdlogic->setConfiguration('minValue', $feature['value_min']);
+											}else{											
+												$cmdlogic->setSubType('numeric');
+										   }
 										  }else {
 											$cmdlogic->setSubType('other');
 										  }
 										  //$cmdlogic->setSubType($feature['type']);
-										  $cmdlogic->setLogicalId('r-'.$eqCmdId);
+										  $cmdlogic->setLogicalId('w-'.$eqCmdId);
 										  $cmdlogic->setType('action');						  
-										  $cmdlogic->setName($feature['name']);
+										  $cmdlogic->setName('w-'.$eqCmdId);
 										  $cmdlogic->setUnite($feature['unit']);
 										  $cmdlogic->setConfiguration('topic', $topicJson);
 										  $cmdlogic->save();
 										  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  }	
-									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'w-'.$eqCmdId);
+									  // $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'r-'.$eqCmdId);
+									  $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),$eqCmdId);
 									  if (!is_object($cmdlogic)) {  
 										  log::add('easyMQTT', 'debug', 'Création de la commande info -7/rw : ' . $feature['name']. ' pour l\'équipement '. $eqLogicName);
 										  log::add('easyMQTT', 'info', 'Création d\'une commande');
@@ -407,9 +425,32 @@ class easyMQTT extends eqLogic {
 										  $cmdlogic->setEqLogic_id($elogic->getId());
 										  $cmdlogic->setEqType('easyMQTT');
 										  #$cmdlogic->setSubType($feature['type']);
-										  $cmdlogic->setLogicalId('w-'.$eqCmdId);
+										  if (stripos($feature['type'],'numeric') !== false){
+											// if(isset($feature['value_max'])){
+												// $cmdlogic->setSubType('slider');
+												// $cmdlogic->setConfiguration('maxValue', $feature['value_max']);
+											// }elseif (isset($feature['value_min'])){
+												// $cmdlogic->setSubType('slider');
+												// $cmdlogic->setConfiguration('minValue', $feature['value_min']);
+											// }else{											
+												$cmdlogic->setSubType('numeric');
+											//}
+											// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
+											// $cmdlogic->setConfiguration('minValue', 1);
+											// $cmdlogic->setConfiguration('maxValue', 100);
+										  }elseif (stripos($feature['type'],'binary') !== false){
+											$cmdlogic->setSubType('binary');
+										//	$cmdlogic->setSubType('slider');
+											//$cmdlogic->setConfiguration('minValue', 1700);
+											// $cmdlogic->setConfiguration('maxValue', 6500);
+										  }else {
+											$cmdlogic->setSubType('other');
+										  }
+										  //$cmdlogic->setLogicalId('r-'.$eqCmdId);
+										  $cmdlogic->setLogicalId($eqCmdId);
 										  $cmdlogic->setType('info');						  
-										  $cmdlogic->setName($feature['name']);
+										  $cmdlogic->setName($eqCmdId);
+										  // $cmdlogic->setName('r-'.$eqCmdId);
 										  $cmdlogic->setConfiguration('topic', $topicJson);
 										  $cmdlogic->save();
 										  $elogic->checkAndUpdateCmd($eqCmdId,$value);
@@ -423,7 +464,18 @@ class easyMQTT extends eqLogic {
 										  $cmdlogic->setEqLogic_id($elogic->getId());
 										  $cmdlogic->setEqType('easyMQTT');
 										  if (stripos($feature['type'],'Enum') !== false){
-											$cmdlogic->setSubType('slider');
+											log::add('easyMQTT', 'debug', ' Type Enum');
+											  $cmdlogic->setSubType('select');
+											  $cpt=0;
+											  $tempEnum = null;
+											foreach($feature['values'] as $enumValue){
+												$tempEnum .= $enumValue.'|'.$enumValue.';';
+												$cpt++;
+												log::add('easyMQTT', 'debug', ' Valeur de tempEnum : ' . $tempEnum);
+											}
+											$tempEnum = rtrim(trim($tempEnum), ';'); // on supprime la virgule qui est ajoutée lors du premier passage dans le foreach	
+											$cmdlogic->setConfiguration('listValue',$tempEnum);
+											//$cmdlogic->setSubType('slider');
 											// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
 											// $cmdlogic->setConfiguration('minValue', 1);
 											// $cmdlogic->setConfiguration('maxValue', 100);
@@ -433,6 +485,8 @@ class easyMQTT extends eqLogic {
 										//	$cmdlogic->setSubType('slider');
 											//$cmdlogic->setConfiguration('minValue', 1700);
 											// $cmdlogic->setConfiguration('maxValue', 6500);
+										  //}elseif (stripos($feature['type'],'enum') !== false){
+											  
 										  }else {
 											$cmdlogic->setSubType('other');
 										  }
@@ -445,7 +499,7 @@ class easyMQTT extends eqLogic {
 										 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
 									  }
 									}else{
-											log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
+										log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
 									}
 								}
 								
@@ -490,20 +544,23 @@ class easyMQTT extends eqLogic {
 							  $cmdlogic->save();
 							  $elogic->checkAndUpdateCmd($eqCmdId,$value);
 							}elseif($exposes['access'] == 'rw'  || $exposes['access'] == '7'){
+							 $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'w-'.$eqCmdId);
+							 if (!is_object($cmdlogic)) {
 							  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();
 							  $cmdlogic->setEqLogic_id($elogic->getId());
 							  $cmdlogic->setEqType('easyMQTT');
 							  #$cmdlogic->setSubType($exposes['type']);
-							  $cmdlogic->setLogicalId('r-'.$eqCmdId);
+							  $cmdlogic->setLogicalId('w-'.$eqCmdId);
 							  $cmdlogic->setType('action');						  
 							  $cmdlogic->setName($exposes['name']);
 							  $cmdlogic->setUnite($exposes['unit']);
 							  $cmdlogic->setConfiguration('topic', $topicJson);
 							  $cmdlogic->save();
 							  //$elogic->checkAndUpdateCmd($eqCmdId,$value);
-							  
+							 $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'r-'.$eqCmdId);
+							 if (!is_object($cmdlogic)) {
 							  log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();
@@ -524,21 +581,36 @@ class easyMQTT extends eqLogic {
 								$cmdlogic->setSubType('other');
 							  }
 							  #$cmdlogic->setSubType($exposes['type']);
-							  $cmdlogic->setLogicalId('w-'.$eqCmdId);
+							  $cmdlogic->setLogicalId('r-'.$eqCmdId);
 							  $cmdlogic->setType('info');						  
 							  $cmdlogic->setName($exposes['name']);
 							  $cmdlogic->setConfiguration('topic', $topicJson);
 							  $cmdlogic->save();
 							  $elogic->checkAndUpdateCmd($eqCmdId,$value);
-							  
+							  }
+							 }
 							}elseif($exposes['access'] == 'w'  || $exposes['access'] == '2'){
+							 $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($elogic->getId(),'2-'.$eqCmdId);
+							 if (!is_object($cmdlogic)) {
 							  log::add('easyMQTT', 'debug', 'Création de la commande action : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
 							  log::add('easyMQTT', 'info', 'Création d\'une commande');
 							  $cmdlogic = new easyMQTTCmd();
 							  $cmdlogic->setEqLogic_id($elogic->getId());
 							  $cmdlogic->setEqType('easyMQTT');
 							  if (stripos($exposes['type'],'Enum') !== false){
-								$cmdlogic->setSubType('slider');
+								log::add('easyMQTT', 'debug', ' Type Enum');
+								  $cmdlogic->setSubType('select');
+								  $cpt=0;
+								  $tempEnum = null;
+								foreach($exposes['values'] as $enumValue){
+									$tempEnum .= $enumValue.'|'.$enumValue.';';
+									$cpt++;
+									log::add('easyMQTT', 'debug', ' Valeur de tempEnum : ' . $tempEnum);
+								}
+								$tempEnum = rtrim(trim($tempEnum), ';'); // on supprime le dernier point-virgule qui est ajouté lors du premier passage dans le foreach	
+								$cmdlogic->setConfiguration('listValue',$tempEnum);
+								//$cmdlogic->setConfiguration('listValue','value'.$cpt.'|'.$enumValue.';value2|'.$enumValue);
+								//$cmdlogic->setSubType('slider');
 								// Rajouter ici une boucle pour ajouter dans la liste les éléments du tableau enum
 								// $cmdlogic->setConfiguration('minValue', 1);
 								// $cmdlogic->setConfiguration('maxValue', 100);
@@ -548,57 +620,60 @@ class easyMQTT extends eqLogic {
 							//	$cmdlogic->setSubType('slider');
 								//$cmdlogic->setConfiguration('minValue', 1700);
 								// $cmdlogic->setConfiguration('maxValue', 6500);
+							  //}elseif (stripos($feature['type'],'enum') !== false){
+								  
 							  }else {
 								$cmdlogic->setSubType('other');
 							  }
 							  //$cmdlogic->setSubType($exposes['type']);
-							  $cmdlogic->setLogicalId('w-'.$eqCmdId);
+							  $cmdlogic->setLogicalId('2-'.$eqCmdId);
 							  $cmdlogic->setType('action');						  
 							  $cmdlogic->setName($exposes['name']);
 							  $cmdlogic->setConfiguration('topic', $topicJson);
 							  $cmdlogic->save();
 							 // $elogic->checkAndUpdateCmd($eqCmdId,$value);
+						     }
 							}else{
 									log::add('easyMQTT', 'debug', ' !!!!!!!!!!! Attention, on n\'a pas pu trouver de valeur ACCESS pour la commande');
-							}
+						   }
 						}
 												
 						// cmd::setGeneric_Type
 						// setGeneric_type(  $_generic_type)
 					}
 				}
-				}else {
-					log::add('easyMQTT', 'debug', 'On va chercher un équipement existant afin de mettre à jour les commandes qui lui sont associées');
-					log::add('easyMQTT', 'debug', 'Valeur de equipment : '. $equipment);
-					log::add('easyMQTT', 'debug', 'Valeur de value : '. print_r($value, true) .'');
-					foreach (self::byType('easyMQTT') as $eqLogicEasyMQTT) { // parcours tous les équipements du plugin easyMQTT
-						log::add('easyMQTT', 'debug', 'FOREACH On est sur l\'équipement : ' . $eqLogicEasyMQTT->getConfiguration('topic'));
-						//if($eqLogicEsxiHost->getConfiguration("type") == 'ESXi'){
-						if (strpos($message->topic,$eqLogicEasyMQTT->getConfiguration('topic')) !== false){
-							log::add('easyMQTT', 'debug', ' UPDATE de l\équipement '.$eqLogicEasyMQTT->getName());	
+				 }//else {
+					// log::add('easyMQTT', 'debug', 'On va chercher un équipement existant afin de mettre à jour les commandes qui lui sont associées');
+					// log::add('easyMQTT', 'debug', 'Valeur de equipment : '. $equipment);
+					// log::add('easyMQTT', 'debug', 'Valeur de value : '. print_r($value, true) .'');
+					// foreach (self::byType('easyMQTT') as $eqLogicEasyMQTT) { // parcours tous les équipements du plugin easyMQTT
+						// log::add('easyMQTT', 'debug', 'FOREACH On est sur l\'équipement : ' . $eqLogicEasyMQTT->getConfiguration('topic'));
+						////////////if($eqLogicEsxiHost->getConfiguration("type") == 'ESXi'){
+						// if (strpos($message->topic,$eqLogicEasyMQTT->getConfiguration('topic')) !== false){
+							// log::add('easyMQTT', 'debug', ' UPDATE de l\équipement '.$eqLogicEasyMQTT->getName());	
 							
-							$topic = $eqLogicEasyMQTT->getConfiguration('topic') .'{' . $equipment . '}'; # ici création de la commande pour le topic associé à la commande
-							$eqCmdId = $equipment;
+							// $topic = $eqLogicEasyMQTT->getConfiguration('topic') .'{' . $equipment . '}'; # ici création de la commande pour le topic associé à la commande
+							// $eqCmdId = $equipment;
 							
-							$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($eqLogicEasyMQTT->getId(),$eqCmdId);
-							if (!is_object($cmdlogic)) {
-								log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
-								log::add('easyMQTT', 'info', 'Création d\'une commande');
-								$cmdlogic = new easyMQTTCmd();
-								$cmdlogic->setEqLogic_id($eqLogicEasyMQTT->getId());
-								$cmdlogic->setEqType('easyMQTT');
-								$cmdlogic->setSubType('string');
-								$cmdlogic->setLogicalId($eqCmdId);
-								$cmdlogic->setType('info');						  
-								$cmdlogic->setName($equipment);
-								$cmdlogic->setConfiguration('topic', $topic);
-								$cmdlogic->save();
-							}$eqLogicEasyMQTT->checkAndUpdateCmd($eqCmdId,$value);			
+							// $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($eqLogicEasyMQTT->getId(),$eqCmdId);
+							// if (!is_object($cmdlogic)) {
+								// log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
+								// log::add('easyMQTT', 'info', 'Création d\'une commande');
+								// $cmdlogic = new easyMQTTCmd();
+								// $cmdlogic->setEqLogic_id($eqLogicEasyMQTT->getId());
+								// $cmdlogic->setEqType('easyMQTT');
+								// $cmdlogic->setSubType('string');
+								// $cmdlogic->setLogicalId($eqCmdId);
+								// $cmdlogic->setType('info');						  
+								// $cmdlogic->setName($equipment);
+								// $cmdlogic->setConfiguration('topic', $topic);
+								// $cmdlogic->save();
+							// }$eqLogicEasyMQTT->checkAndUpdateCmd($eqCmdId,$value);			
 							
-							//$goOnZigbee = "no"; // Car on a trouvé un équipement déjà existant -> confirmer que ça ne bloque pas la création des commandes supplémentaires qui ne sont pas définie dans le json DEVICES
-						}
-					}
-				}
+							/////////////$goOnZigbee = "no"; // Car on a trouvé un équipement déjà existant -> confirmer que ça ne bloque pas la création des commandes supplémentaires qui ne sont pas définie dans le json DEVICES
+						// }
+					// }
+				// }
 				
 				if($value['definition'] == $null){
 					log::add('easyMQTT', 'debug', 'Valeur de description dans définition : est égale à NULL. Pour confirmer voici le type de l\'objet : '. $value['type'] .'');
@@ -704,48 +779,85 @@ class easyMQTTCmd extends cmd {
 	  log::add('easyMQTT','debug','Func execute - easyMQTT.class.php');
     switch ($this->getType()) {
       case 'action' :
+	  $topic = $this->getConfiguration('topic');
 	  log::add('easyMQTT','debug','Func execute - type : ' . $this->getType());
 	  log::add('easyMQTT','debug','Func execute - subType : ' . $this->getSubType());
-      $request = $this->getConfiguration('request','1');
-	  log::add('easyMQTT','debug','Func execute - request : ' . $request);
-      $topic = $this->getConfiguration('topic');
 	  log::add('easyMQTT','debug','Func execute - Contenu de topic : '. $topic);
+      // if($this->getSubType() == 'select'){
+		// log::add('easyMQTT','debug','Func execute - IF SELECT');
+		//////////////// $request = '{"effect":'.$_options['select'].'}';
+		// $request = '{"effect":"'.$_options['select'].'"}';
+		// $result = explode('{',$topic);
+		// $topic = $result[0];
+		// $topic = $topic.'/set';
+		
+	  // }elseif($this->getSubType() == 'slider'){
+		// log::add('easyMQTT','debug','Func execute - ELSEIF SLIDER');
+		/////////// $request = '{"effect":'.$_options['select'].'}';
+		// $request = '{"effect":"'.$_options['select'].'"}';
+		// $result = explode('{',$topic);
+		// $topic = $result[0];
+		// $topic = $topic.'/set';
+	  // }else{
+		//log::add('easyMQTT','debug','Func execute - ELSE SELECT');
+		$request = $this->getConfiguration('request','1');
+	  // }
+	  //$request = str_replace('#select#', $_options['select'], $request);
+	  log::add('easyMQTT','debug','Func execute - request : ' . $request);
+      // $topic = $this->getConfiguration('topic');
+	  // log::add('easyMQTT','debug','Func execute - Contenu de topic après modification : '. $topic);
       switch ($this->getSubType()) {
         case 'slider':
-        //$request = str_replace('#slider#', $_options['slider'], $request);
-		$request = $_options['slider'];
-		log::add('easyMQTT','debug','Func execute - Case Slider : ' . $request);
-        break;
+			//$request = str_replace('#slider#', $_options['slider'], $request);
+			$result = explode('{',$topic);
+			$topic = $result[0];
+			$topic = $topic.'/set';
+			$request = $_options['slider'];
+			$parameter = str_replace("}","",$result[1]);
+			$request = '{"'.$parameter.'":"'.$_options['slider'].'"}';
+			log::add('easyMQTT','debug','Func execute - Case Slider : ' . $request);
+			break;
         case 'color':
-        //$request = str_replace('#color#', $_options['color'], $request);
-		log::add('easyMQTT','debug','Func execute - Case color  contenu de $_options[color] : ' . $_options['color']);
-		// yeelight alors on convertit la valeur hexadécimale
-		if (stripos($topic,'yeelight') !== false){
-			log::add('easyMQTT','debug','Func execute - C\'est du yeelight pour le Case color : ' . $request);
-			//$RGBValue = hex2rgbrgb($_options['color']);
-			//$RGBValue = explode(",", $RGBValue);
-						
-			//list($r, $g, $b) = $RGBValue;
-			//log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $r . ' - ' . $g ' . ' $b );
-			// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $RGBValue );
-			// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . print_r($RGBValue) );
-			// $request = convertRGBToXY("25","97","56");
-			// $request = convertRGBToXY($RGBValue[0],$RGBValue[1],$RGBValue[2]);
-			// log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
-			// $request = hex2dec($_options['color']);
-			$request = HexToDez($_options['color']);
-			log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
-		}
-		log::add('easyMQTT','debug','Func execute - Case color : ' . $request);
-        break;
+			//$request = str_replace('#color#', $_options['color'], $request);
+			log::add('easyMQTT','debug','Func execute - Case color  contenu de $_options[color] : ' . $_options['color']);
+			// yeelight alors on convertit la valeur hexadécimale
+			if (stripos($topic,'yeelight') !== false){
+				log::add('easyMQTT','debug','Func execute - C\'est du yeelight pour le Case color : ' . $request);
+				//$RGBValue = hex2rgbrgb($_options['color']);
+				//$RGBValue = explode(",", $RGBValue);
+							
+				//list($r, $g, $b) = $RGBValue;
+				//log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $r . ' - ' . $g ' . ' $b );
+				// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . $RGBValue );
+				// log::add('easyMQTT','debug','Func execute - Case color RGB: ' . print_r($RGBValue) );
+				// $request = convertRGBToXY("25","97","56");
+				// $request = convertRGBToXY($RGBValue[0],$RGBValue[1],$RGBValue[2]);
+				// log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
+				// $request = hex2dec($_options['color']);
+				$request = HexToDez($_options['color']);
+				log::add('easyMQTT','debug','Func execute - Case color Decimale: ' . $request);
+			}
+			log::add('easyMQTT','debug','Func execute - Case color : ' . $request);
+			break;
         case 'message':
-        $request = str_replace('#title#', $_options['title'], $request);
-        $request = str_replace('#message#', $_options['message'], $request);
-		log::add('easyMQTT','debug','Func execute - Case message : ' . $request);
-        break;
+			$request = str_replace('#title#', $_options['title'], $request);
+			$request = str_replace('#message#', $_options['message'], $request);
+			log::add('easyMQTT','debug','Func execute - Case message : ' . $request);
+			break;
+		case 'select':
+			log::add('easyMQTT','debug','Func execute - IF SELECT');
+			// $request = '{"effect":'.$_options['select'].'}';
+			$request = '{"effect":"'.$_options['select'].'"}';
+			$result = explode('{',$topic);
+			$topic = $result[0];
+			$topic = $topic.'/set';
+		
       }
+	  log::add('easyMQTT','debug','Func execute - Contenu de topic après modification : '. $topic);
       $request = str_replace('\\', '', jeedom::evaluateExpression($request));
+	  log::add('easyMQTT','debug','Func execute - Valeur de request apres le jeedom evaluateExpression : ' . $request);
       $request = cmd::cmdToValue($request);
+	  log::add('easyMQTT','debug','Func execute - Valeur de request apres le cmd cmdToValue : ' . $request);
       easyMQTT::publishMosquitto($this->getId(), $topic, $request, $this->getConfiguration('retain','0'));
       }
       return true;

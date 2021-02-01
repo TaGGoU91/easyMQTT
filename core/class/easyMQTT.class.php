@@ -72,24 +72,24 @@ class easyMQTT extends eqLogic {
     $cron->halt();
   }
 
-  // public static function dependancy_info() {
-    // $return = array();
-    // $return['log'] = 'easyMQTT_dep';
-    // $return['state'] = 'nok';
-    // $cmd = "dpkg -l | grep mosquitto";
-    // exec($cmd, $output, $return_var);
-    ///////////lib PHP exist
-    // $libphp = extension_loaded('mosquitto');
-    // if ($output[0] != "" && $libphp) {
-      // $return['state'] = 'ok';
-    // }
-    // return $return;
-  // }
+  public static function dependancy_info() {
+    $return = array();
+    $return['log'] = 'easyMQTT_dep';
+    $return['state'] = 'nok';
+    $cmd = "dpkg -l | grep mosquitto";
+    exec($cmd, $output, $return_var);
+    /////////lib PHP exist
+    $libphp = extension_loaded('mosquitto');
+    if ($output[0] != "" && $libphp) {
+      $return['state'] = 'ok';
+    }
+    return $return;
+  }
 
-    // public static function dependancy_install() {
-        // log::remove(__CLASS__ . '_dep');
-        // return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('easyMQTT') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_dep'));
-    // }
+    public static function dependancy_install() {
+        log::remove(__CLASS__ . '_dep');
+        return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('easyMQTT') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_dep'));
+    }
 
   public static function daemon() {
 	  log::add('easyMQTT','debug','Func deamon - easyMQTT.class.php');

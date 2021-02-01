@@ -8,7 +8,7 @@
 	"category" : "automation protocol",
 	"language" : ["fr_FR"],
 	"compatibility" : ["diy","v4"],
-	"hasDependency" : false,
+	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"changelog" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/changelog.html",
 	"documentation" : "https://taggou91.github.io/jeedom_docs/plugins/easyMQTT/"

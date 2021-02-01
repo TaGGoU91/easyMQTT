@@ -41,11 +41,11 @@ class easyMQTT extends eqLogic {
     if (is_object($cron) && $cron->running()) {
       $return['state'] = 'ok';
     }
-    // $dependancy_info = self::dependancy_info();
-    // if ($dependancy_info['state'] == 'ok') {
-      // $return['launchable'] = 'ok';
-    // }
-	$return['launchable'] = 'ok';
+    $dependancy_info = self::dependancy_info();
+     if ($dependancy_info['state'] == 'ok') {
+     $return['launchable'] = 'ok';
+    }
+	//$return['launchable'] = 'ok';
     return $return;
   }
 

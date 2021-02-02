@@ -642,38 +642,38 @@ class easyMQTT extends eqLogic {
 						// setGeneric_type(  $_generic_type)
 					}
 				}
-				 }//else {
-					// log::add('easyMQTT', 'debug', 'On va chercher un équipement existant afin de mettre à jour les commandes qui lui sont associées');
-					// log::add('easyMQTT', 'debug', 'Valeur de equipment : '. $equipment);
-					// log::add('easyMQTT', 'debug', 'Valeur de value : '. print_r($value, true) .'');
-					// foreach (self::byType('easyMQTT') as $eqLogicEasyMQTT) { // parcours tous les équipements du plugin easyMQTT
-						// log::add('easyMQTT', 'debug', 'FOREACH On est sur l\'équipement : ' . $eqLogicEasyMQTT->getConfiguration('topic'));
-						////////////if($eqLogicEsxiHost->getConfiguration("type") == 'ESXi'){
-						// if (strpos($message->topic,$eqLogicEasyMQTT->getConfiguration('topic')) !== false){
-							// log::add('easyMQTT', 'debug', ' UPDATE de l\équipement '.$eqLogicEasyMQTT->getName());	
+				 }else {
+					log::add('easyMQTT', 'debug', 'On va chercher un équipement existant afin de mettre à jour les commandes qui lui sont associées');
+					log::add('easyMQTT', 'debug', 'Valeur de equipment : '. $equipment);
+					log::add('easyMQTT', 'debug', 'Valeur de value : '. print_r($value, true) .'');
+					foreach (self::byType('easyMQTT') as $eqLogicEasyMQTT) { // parcours tous les équipements du plugin easyMQTT
+						log::add('easyMQTT', 'debug', 'FOREACH On est sur l\'équipement : ' . $eqLogicEasyMQTT->getConfiguration('topic'));
+						//////////if($eqLogicEsxiHost->getConfiguration("type") == 'ESXi'){
+						if (strpos($message->topic,$eqLogicEasyMQTT->getConfiguration('topic')) !== false){
+							log::add('easyMQTT', 'debug', ' UPDATE de l\équipement '.$eqLogicEasyMQTT->getName());	
 							
-							// $topic = $eqLogicEasyMQTT->getConfiguration('topic') .'{' . $equipment . '}'; # ici création de la commande pour le topic associé à la commande
-							// $eqCmdId = $equipment;
+							$topic = $eqLogicEasyMQTT->getConfiguration('topic') .'{' . $equipment . '}'; # ici création de la commande pour le topic associé à la commande
+							$eqCmdId = $equipment;
 							
-							// $cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($eqLogicEasyMQTT->getId(),$eqCmdId);
-							// if (!is_object($cmdlogic)) {
-								// log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
-								// log::add('easyMQTT', 'info', 'Création d\'une commande');
-								// $cmdlogic = new easyMQTTCmd();
-								// $cmdlogic->setEqLogic_id($eqLogicEasyMQTT->getId());
-								// $cmdlogic->setEqType('easyMQTT');
-								// $cmdlogic->setSubType('string');
-								// $cmdlogic->setLogicalId($eqCmdId);
-								// $cmdlogic->setType('info');						  
-								// $cmdlogic->setName($equipment);
-								// $cmdlogic->setConfiguration('topic', $topic);
-								// $cmdlogic->save();
-							// }$eqLogicEasyMQTT->checkAndUpdateCmd($eqCmdId,$value);			
+							$cmdlogic = easyMQTTCmd::byEqLogicIdAndLogicalId($eqLogicEasyMQTT->getId(),$eqCmdId);
+							if (!is_object($cmdlogic)) {
+								log::add('easyMQTT', 'debug', 'Création de la commande info : ' . $exposes['name']. ' pour l\'équipement '. $eqLogicName);
+								log::add('easyMQTT', 'info', 'Création d\'une commande');
+								$cmdlogic = new easyMQTTCmd();
+								$cmdlogic->setEqLogic_id($eqLogicEasyMQTT->getId());
+								$cmdlogic->setEqType('easyMQTT');
+								$cmdlogic->setSubType('string');
+								$cmdlogic->setLogicalId($eqCmdId);
+								$cmdlogic->setType('info');						  
+								$cmdlogic->setName($equipment);
+								$cmdlogic->setConfiguration('topic', $topic);
+								$cmdlogic->save();
+							}$eqLogicEasyMQTT->checkAndUpdateCmd($eqCmdId,$value);			
 							
-							/////////////$goOnZigbee = "no"; // Car on a trouvé un équipement déjà existant -> confirmer que ça ne bloque pas la création des commandes supplémentaires qui ne sont pas définie dans le json DEVICES
-						// }
-					// }
-				// }
+							///////////$goOnZigbee = "no"; // Car on a trouvé un équipement déjà existant -> confirmer que ça ne bloque pas la création des commandes supplémentaires qui ne sont pas définie dans le json DEVICES
+						}
+					}
+				}
 				
 				if($value['definition'] == $null){
 					log::add('easyMQTT', 'debug', 'Valeur de description dans définition : est égale à NULL. Pour confirmer voici le type de l\'objet : '. $value['type'] .'');
